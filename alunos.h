@@ -11,18 +11,17 @@ typedef struct alunos {
 }CAD_ALUNOS;
 //Função para gravar registro de funcionários.
 void cadastrar(){
-	limpartela();
+	system("cls");
 	FILE* arquivo; //FILE (sempre maiuscula), variável do tipo file (arquivo é o nome do ponteiro), nesta linha está sendo criado o ponteiro
 	CAD_ALUNOS al;
 	arquivo = fopen ("cad_alunos.txt", "ab"); // "ab" acrescenta dados binários no fim do arquivo e se o arquivo não existir ele será criado e
-	                                     //e fopen é responsável fazer com que o ponteiro aponte para um arquivo no programa
-
+		                                      // e fopen é responsável fazer com que o ponteiro aponte para um arquivo no programa
 	if (arquivo == NULL){
 		printf("\nProblemas na abertura do arquivo!\n");
 	}
 	else{
 		do{
-            limpartela();
+            system("cls");
             fflush(stdin);
             printf("\nMatricula do Aluno: \n");
             scanf("%d", &al.matricula);
@@ -46,7 +45,7 @@ void cadastrar(){
 		}
     }
 void cad_alunos(struct alunos al){
-    int cont=0;
+    int cont = 0;
     printf("\n---------------CADASTRO DE ALUNOS-------------\n\n");
     //Criando um arquivo, com um ponteiro do tipo FILE
     FILE *arquivo;
@@ -70,7 +69,7 @@ void cad_alunos(struct alunos al){
         fflush(stdin);
         gets(al.cpf);
         fprintf(arquivo, "%s ", al.cpf); //escrevendo o nome no arquivo
-        limpartela();
+        system("cls");
         printf("ALUNO CADASTRADO COM SUCESSO!");
     }
     fclose(arquivo);
@@ -99,7 +98,7 @@ void listaralunos(){
     }
     printf("\n\n***************Fim do relatório.***************\n\n");
 	system("pause");
-	limpartela();
+	system("cls");
 }
 //Função para verificar que opção vai ser usada no menu aluno
 void op_alunos () {
@@ -115,24 +114,24 @@ void op_alunos () {
                 scanf("%d", &o);
         switch(o){
             case 1:
-                limpartela();
+                system("cls");
                 cadastrar();
                 Sleep(1000);
             case 2:
-                limpartela();
+                system("cls");
                 Sleep(1000);
                 break;
             case 3:
-                limpartela();
+                system("cls");
                 Sleep(1000);
                 break;
             case 4:
-                limpartela();
+                system("cls");
                 listaralunos(al);
                 Sleep(1000);
                 break;
             case 5:
-                limpartela();
+                system("cls");
                 Sleep(1000);
                 menu_principal();
             default:
