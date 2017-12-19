@@ -7,18 +7,16 @@
 #include "alunos.h"
 
 
-
-
 main(){
     setlocale(LC_ALL, "");
     int i,j, op=0;
-    printf("\n\n\n      ...:::::  VOCÊ VAI CONHECER O NOSSO SISTEMA DE GESTÃO DE BIBLIOTECAS ! :::::... \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    printf("      Carregando Sistema...\n\n");
+    printf("\n\n     ...:::::  VOCÊ VAI CONHECER O NOSSO SISTEMA DE GESTÃO DE BIBLIOTECAS ! :::::... \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    printf("     Carregando Sistema...\n\n");
     for (i = 1; i <= 50; i++){
       printf ("  %d%%\r", i*2);
       for (j = 0; j < i; j++){
          if (j == 0)
-           printf("      ");
+           printf("     ");
            printf ("%c", 177);
            Sleep(2);
       }
