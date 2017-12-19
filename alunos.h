@@ -12,12 +12,17 @@ typedef struct alunos {
 }CAD_ALUNOS;
 //Função para gravar registro de funcionários.
 void cadastrar(){
-	limpartela();
+	system("cls");
 	FILE* arquivo; //FILE (sempre maiuscula), variável do tipo file (arquivo é o nome do ponteiro), nesta linha está sendo criado o ponteiro
 	CAD_ALUNOS al;
+<<<<<<< HEAD
 	arquivo = fopen ("cad_alunos.txt", "ab");// "ab" acrescenta dados binários no fim do arquivo e se o arquivo não existir ele será criado e
 	                                     //e fopen é responsável fazer com que o ponteiro aponte para um arquivo no programa
 
+=======
+	arquivo = fopen ("cad_alunos.txt", "ab"); // "ab" acrescenta dados binários no fim do arquivo e se o arquivo não existir ele será criado e
+		                                      // e fopen é responsável fazer com que o ponteiro aponte para um arquivo no programa
+>>>>>>> 0d63f4766039b9b76d33eae934afd6ec31e5d922
 	if (arquivo == NULL){
 		printf("\nProblemas na abertura do arquivo!\n");
 	}
@@ -44,9 +49,15 @@ void cadastrar(){
 		fclose(arquivo); //Fecha o arquivo que foi aberto.
 		}
     }
+<<<<<<< HEAD
 void listaralunos(){
     CAD_ALUNOS al;
     printf("\n---------------LISTAGEM DE ALUNOS-------------\n\n");
+=======
+void cad_alunos(struct alunos al){
+    int cont = 0;
+    printf("\n---------------CADASTRO DE ALUNOS-------------\n\n");
+>>>>>>> 0d63f4766039b9b76d33eae934afd6ec31e5d922
     //Criando um arquivo, com um ponteiro do tipo FILE
     FILE *arquivo;
     //Abrindo o arquivo criado e dando o nome cad_alunos para o arquivo
@@ -57,6 +68,7 @@ void listaralunos(){
         printf("Impossivel Abrir Aquivo!");
     }
     else{
+<<<<<<< HEAD
             while(fread(&al, sizeof(CAD_ALUNOS), 1,arquivo)==1){
                 printf("\nMatricula: %d", al.matricula);
                 printf("\nNome: %s", al.nome);
@@ -64,6 +76,22 @@ void listaralunos(){
                 printf("\n-----------------------------------------------------------\n");
                 system("pause");
                 }
+=======
+
+        mat++;
+        printf("Sua matricula: %d\n", mat);
+        fprintf(arquivo, "%d ", mat); //escrevendo a matricula no arquivo
+        printf("Digite o Nome do Aluno: ");
+        fflush(stdin);
+        gets(al.nome);
+        fprintf(arquivo, "%s ", al.nome); //escrevendo o nome no arquivo
+        printf("Digite o CPF do Aluno: ");
+        fflush(stdin);
+        gets(al.cpf);
+        fprintf(arquivo, "%s ", al.cpf); //escrevendo o nome no arquivo
+        system("cls");
+        printf("ALUNO CADASTRADO COM SUCESSO!");
+>>>>>>> 0d63f4766039b9b76d33eae934afd6ec31e5d922
     }
     printf("\n\n***************Fim do relatório.***************\n\n");
 	system("pause");
@@ -125,12 +153,16 @@ void pnome(){
     }
     printf("\n\n***************Fim da Edição.***************\n\n");
 	system("pause");
+<<<<<<< HEAD
 
 
 }
 void pmatricula(){
 }
 void pcpf(){
+=======
+	system("cls");
+>>>>>>> 0d63f4766039b9b76d33eae934afd6ec31e5d922
 }
 //Função para verificar que opção vai ser usada no menu aluno
 void op_alunos () {
@@ -146,6 +178,7 @@ void op_alunos () {
                 scanf("%d", &o);
         switch(o){
             case 1:
+<<<<<<< HEAD
                 cadastrar();
                 Sleep(1000);
             case 2:
@@ -156,10 +189,29 @@ void op_alunos () {
                 Sleep(1000);
                 break;
             case 4:
+=======
+                system("cls");
+                cadastrar();
+                Sleep(1000);
+            case 2:
+                system("cls");
+                Sleep(1000);
+                break;
+            case 3:
+                system("cls");
+                Sleep(1000);
+                break;
+            case 4:
+                system("cls");
+>>>>>>> 0d63f4766039b9b76d33eae934afd6ec31e5d922
                 listaralunos(al);
                 Sleep(1000);
                 break;
             case 5:
+<<<<<<< HEAD
+=======
+                system("cls");
+>>>>>>> 0d63f4766039b9b76d33eae934afd6ec31e5d922
                 Sleep(1000);
                 menu_principal();
             default:

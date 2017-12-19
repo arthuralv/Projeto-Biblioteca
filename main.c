@@ -6,7 +6,11 @@
 #include "menu_principal.c"
 #include "alunos.h"
 
+<<<<<<< HEAD
 void limpartela();
+=======
+
+>>>>>>> 0d63f4766039b9b76d33eae934afd6ec31e5d922
 main(){
     setlocale(LC_ALL, "");
     int i,j, op=0;
@@ -50,3 +54,7 @@ main(){
 }
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0d63f4766039b9b76d33eae934afd6ec31e5d922
