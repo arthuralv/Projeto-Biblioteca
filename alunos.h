@@ -4,6 +4,7 @@
 
 int mat = 100;
 //Estrutura para o cadastro de alunos
+void pnome();
 typedef struct alunos {
     int matricula;
     char nome[50];
@@ -14,7 +15,7 @@ void cadastrar(){
 	limpartela();
 	FILE* arquivo; //FILE (sempre maiuscula), variável do tipo file (arquivo é o nome do ponteiro), nesta linha está sendo criado o ponteiro
 	CAD_ALUNOS al;
-	arquivo = fopen ("cad_alunos.txt", "ab"); // "ab" acrescenta dados binários no fim do arquivo e se o arquivo não existir ele será criado e
+	arquivo = fopen ("cad_alunos.txt", "ab");// "ab" acrescenta dados binários no fim do arquivo e se o arquivo não existir ele será criado e
 	                                     //e fopen é responsável fazer com que o ponteiro aponte para um arquivo no programa
 
 	if (arquivo == NULL){
@@ -22,7 +23,7 @@ void cadastrar(){
 	}
 	else{
 		do{
-            limpartela();
+            system("cls");
             fflush(stdin);
             printf("\nMatricula do Aluno: \n");
             scanf("%d", &al.matricula);
@@ -37,46 +38,13 @@ void cadastrar(){
 			fwrite(&al, sizeof(CAD_ALUNOS), 1, arquivo); // o numero 1 representa a quantidade de elementos que desejo gravar na struct
 															//SIZEOF passa para a função o tamanho em bytes da struct
 			printf("\n\nRegistro gravado com sucesso!\n\n");
-
-
 			printf("\nDeseja Continuar e Inserir um Novo Registro (S/N)?\n");
 		}
 		while(getche() == 's');
 		fclose(arquivo); //Fecha o arquivo que foi aberto.
 		}
     }
-void cad_alunos(struct alunos al){
-    int cont=0;
-    printf("\n---------------CADASTRO DE ALUNOS-------------\n\n");
-    //Criando um arquivo, com um ponteiro do tipo FILE
-    FILE *arquivo;
-    //Abrindo o arquivo criado e dando o nome cad_alunos para o arquivo
-    //O "a+" é  para abrir salvar no final, e ler os dados do arquivo
-    arquivo = fopen("cad_alunos.txt", "a+b");
-    //verificando se o arquivo foi aberto com exito
-    if(arquivo == NULL){
-        printf("Impossivel Abrir Aquivo!");
-    }
-    else{
-
-        mat++;
-        printf("Sua matricula: %d\n", mat);
-        fprintf(arquivo, "%d ", mat); //escrevendo a matricula no arquivo
-        printf("Digite o Nome do Aluno: ");
-        fflush(stdin);
-        gets(al.nome);
-        fprintf(arquivo, "%s ", al.nome); //escrevendo o nome no arquivo
-        printf("Digite o CPF do Aluno: ");
-        fflush(stdin);
-        gets(al.cpf);
-        fprintf(arquivo, "%s ", al.cpf); //escrevendo o nome no arquivo
-        limpartela();
-        printf("ALUNO CADASTRADO COM SUCESSO!");
-    }
-    fclose(arquivo);
-}
 void listaralunos(){
-    char aux[255];
     CAD_ALUNOS al;
     printf("\n---------------LISTAGEM DE ALUNOS-------------\n\n");
     //Criando um arquivo, com um ponteiro do tipo FILE
@@ -90,7 +58,7 @@ void listaralunos(){
     }
     else{
             while(fread(&al, sizeof(CAD_ALUNOS), 1,arquivo)==1){
-                printf("\nMatricula: %d\n", al.matricula);
+                printf("\nMatricula: %d", al.matricula);
                 printf("\nNome: %s", al.nome);
                 printf("\nCPF: %s", al.cpf);
                 printf("\n-----------------------------------------------------------\n");
@@ -99,7 +67,70 @@ void listaralunos(){
     }
     printf("\n\n***************Fim do relatório.***************\n\n");
 	system("pause");
-	limpartela();
+}
+void editar (){
+    int op=0;
+
+    printf("---------PROCURAR ALUNO PARA EDITAR-----------");
+    do{
+        printf("\n1 - Procurar Por Nome ");
+        printf("\n2 - Procurar Por Matricula ");
+        printf("\n3 - Procurar Por CPF ");
+        printf("\n4 - Sair");
+        scanf("%d", &op);
+        system("cls");
+        switch(op){
+            case 1:
+                pnome();
+                break;
+            case 2:
+                //pmatricula();
+                break;
+            case 3:
+               // pcpf();
+                break;
+            case 4:
+                printf("Saindo...\n");
+                Sleep(1000);
+                break;
+            default:
+                printf("\nOpcao invalida\n");
+                break;
+        }
+    }while(op != 4);
+}
+void pnome(){
+    CAD_ALUNOS al;
+    char aux[255];
+    printf("\n---------------PROCURAR ALUNOS POR NOME-------------\n\n");
+    //Criando um arquivo, com um ponteiro do tipo FILE
+    FILE *arquivo;
+    //Abrindo o arquivo criado e dando o nome cad_alunos para o arquivo
+    //O "a+" é  para abrir salvar no final, e ler os dados do arquivo
+    arquivo = fopen("cad_alunos.txt", "rb");
+    //verificando se o arquivo foi aberto com exito
+    if(arquivo == NULL){
+        printf("Impossivel Abrir Aquivo!");
+    }
+    else{
+            fflush(stdin);
+            printf("\nDigite o nome que deseja procurar: ");
+            gets(aux);
+
+            while(fread(&al, sizeof(CAD_ALUNOS), 1,arquivo)==1){
+                 if(strstr(aux, al.nome)){
+                        printf("editar nome: ");
+                    }
+                }
+    }
+    printf("\n\n***************Fim da Edição.***************\n\n");
+	system("pause");
+
+
+}
+void pmatricula(){
+}
+void pcpf(){
 }
 //Função para verificar que opção vai ser usada no menu aluno
 void op_alunos () {
@@ -115,24 +146,20 @@ void op_alunos () {
                 scanf("%d", &o);
         switch(o){
             case 1:
-                limpartela();
                 cadastrar();
                 Sleep(1000);
             case 2:
-                limpartela();
                 Sleep(1000);
                 break;
             case 3:
-                limpartela();
+                editar();
                 Sleep(1000);
                 break;
             case 4:
-                limpartela();
                 listaralunos(al);
                 Sleep(1000);
                 break;
             case 5:
-                limpartela();
                 Sleep(1000);
                 menu_principal();
             default:
