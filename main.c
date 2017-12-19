@@ -9,7 +9,7 @@
 main(){
     setlocale(LC_ALL, "");
     int i,j, op=0;
-    printf("\n\n     ...:::::  VOCÊ VAI CONHECER O NOSSO SISTEMA DE GESTÃO DE BIBLIOTECAS ! :::::... \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    printf("\n\n                                ...:::::  BIBLIOTECA CENTRAL DA UEPB ! :::::... \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     printf("     Carregando Sistema...\n\n");
     for (i = 1; i <= 50; i++){
       printf ("  %d%%\r", i*2);
