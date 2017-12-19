@@ -120,7 +120,7 @@ pnome() {
         printf("\nDigite o nome que deseja procurar: ");
         gets(aux);
 
-        while(fread(&al, sizeof(CAD_ALUNOS), 1,arquivo)==1) {
+        while(fread(&al, sizeof(CAD_ALUNOS), 1,arquivo) == 1) {
             if(strstr(aux, al.nome)) {
                 printf("editar nome: ");
             }
