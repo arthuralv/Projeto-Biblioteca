@@ -6,7 +6,6 @@
 #include "menu_principal.c"
 #include "alunos.h"
 
-
 main(){
     setlocale(LC_ALL, "");
     int i,j, op=0;
@@ -48,6 +47,4 @@ main(){
     }while(op != 4);
 
 }
-
-
 
