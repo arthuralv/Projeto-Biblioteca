@@ -26,40 +26,81 @@ void cadastrar() {
     do {
         system("cls");
         fflush(stdin);
-        printf("\nMatricula do Aluno: \n");
+        menuCIMA(strlen("Matricula do Aluno: ")+10);
+        menuOPCAO("Matricula do Aluno: ", strlen("Matricula do Aluno: ")+10);
+        gotoXY(0, 2);
+        menuBAIXO(strlen("Matricula do Aluno: ")+10);
+        gotoXY(22, 1);
         scanf("%d", &al.matricula);
+        system("cls");
         fflush(stdin);
-        printf("\nDigite o Nome do Aluno: \n");
+        menuCIMA(strlen("Digite o Nome do Aluno: ")+50);
+        menuOPCAO("Digite o Nome do Aluno: ", strlen("Digite o Nome do Aluno: ")+50);
+        gotoXY(0, 2);
+        menuBAIXO(strlen("Digite o Nome do Aluno: ")+50);
+        gotoXY(26, 1);
         gets(al.nome);
         strupr(al.nome); //Converte o conteúdo digitado em maiúsculo.
         fflush(stdin);
-        printf("\nDigite o CPF do Aluno: \n");
+        system("cls");
+        menuCIMA(strlen("Digite o CPF do Aluno: ")+15);
+        menuOPCAO("Digite o CPF do Aluno: ", strlen("Digite o CPF do Aluno: ")+15);
+        gotoXY(0, 2);
+        menuBAIXO(strlen("Digite o CPF do Aluno: ")+15);
+        gotoXY(25, 1);
         gets(al.cpf);
         strupr(al.cpf);//Converte o conteúdo digitado em maiúsculo.
         fwrite(&al, sizeof(CAD_ALUNOS), 1, arquivo); // o numero 1 representa a quantidade de elementos que desejo gravar na struct
         //SIZEOF passa para a função o tamanho em bytes da struct
-        printf("\n\nRegistro gravado com sucesso!\n\n");
-        printf("\nDeseja Continuar e Inserir um Novo Registro (S/N)?\n");
+        system("cls");
+        menuCIMA(strlen("Registro gravado com sucesso!"));
+        menuOPCAO("\nRegistro gravado com sucesso!\n", strlen("Registro gravado com sucesso!"));
+        gotoXY(0, 2);
+        menuBAIXO(strlen("Registro gravado com sucesso!"));
+        gotoXY(22, 1);
+        system("cls");
+        menuCIMA(strlen("Deseja Continuar e Inserir um Novo Registro (S/N)?  "));
+        menuOPCAO("Deseja Continuar e Inserir um Novo Registro (S/N)?  ", strlen("Deseja Continuar e Inserir um Novo Registro (S/N)? "));
+        gotoXY(0, 2);
+        menuBAIXO(strlen("Deseja Continuar e Inserir um Novo Registro (S/N)?  "));
+        menuCIMA(10);
+        menuOPCAO(" OPCAO: ", 10);
+        menuBAIXO(10);
+        gotoXY(10, 4);
         setbuf(stdin, NULL);
         op = getchar();
         op = toupper(op);
         system("cls");
-        if(op != 'S' && op != 'N') {
-            do {
-                printf("Opção inválida. Digite novamente!\n");
-                printf("\nDeseja Continuar e Inserir um Novo Registro (S/N)?\n");
-                printf("Opção: ");
-                setbuf(stdin, NULL);
-                op = getchar();
-                op = toupper(op);
-                system("cls");
-            } while(op != 'S' && op != 'N');
+        while(op != 'S' && op != 'N') {
+            system("cls");
+            menuCIMA(strlen("Opcao invalida, digite novamente!"));
+            menuOPCAO("Opcao invalida, digite novamente!", strlen("Opcao invalida, digite novamente!"));
+            gotoXY(0, 2);
+            menuBAIXO(strlen("Opcao invalida, digite novamente!"));
+            gotoXY(22, 1);
+            printf("\n\n");
+            system("pause");
+            system("cls");
+            menuCIMA(strlen("Deseja Continuar e Inserir um Novo Registro (S/N)?  "));
+            menuOPCAO("Deseja Continuar e Inserir um Novo Registro (S/N)?  ", strlen("Deseja Continuar e Inserir um Novo Registro (S/N)? "));
+            gotoXY(0, 2);
+            menuBAIXO(strlen("Deseja Continuar e Inserir um Novo Registro (S/N)?  "));
+            menuCIMA(10);
+            menuOPCAO(" OPCAO: ", 10);
+            menuBAIXO(10);
+            gotoXY(10, 4);
+            setbuf(stdin, NULL);
+            op = getchar();
+            op = toupper(op);
+            system("cls");
         }
-    }while(op == 'S');
+    } while(op == 'S');
+
     fclose(arquivo); //Fecha o arquivo que foi aberto.
     system("cls");
 }
-void listaralunos() {
+
+void listarAlunos() {
 
     FILE *arquivo;
     arquivo = fopen("cad_alunos.txt", "rb");
@@ -133,16 +174,9 @@ pnome() {
 
 //Função para verificar que opção vai ser usada no menu aluno
 void op_alunos () {
-    int o=0;
+    int o = menuAluno();
     struct alunos al;
-    do {
-        printf("\n---------------ALUNOS-------------\n\n");
-        printf("-\t 1 Cadastrar Aluno\t\t\t-\n");
-        printf("-\t 2 Remover Aluno\t\t\t-\n");
-        printf("-\t 3 Editar Aluno\t\t\t-\n");
-        printf("-\t 4 Listar Alunos Cadastrados\t\t\t-\n");
-        printf("-\t 5 Ir para menu anterior\t\t\t-\n\n");
-        scanf("%d", &o);
+    while(o != 5) {
         system("cls");
         switch(o) {
         case 1:
@@ -155,19 +189,18 @@ void op_alunos () {
             Sleep(1000);
             break;
         case 4:
-            listaralunos(al);
+            listarAlunos(al);
             Sleep(1000);
             break;
         case 5:
             Sleep(1000);
-            menu_principal();
+            return;
         default:
             printf("Opção invalida\n");
             break;
         }
         fflush(stdin);
     }
-    while(o >= 5);
 }
 void verificadorArquivo(FILE *arquivo) {
     if(arquivo == NULL) {
@@ -177,4 +210,28 @@ void verificadorArquivo(FILE *arquivo) {
         Sleep(2000);
         exit(1);
     }
+}
+
+int menuAluno() {
+    int o;
+    menuCIMA(40);
+    printf(" %c                 ALUNOS                 %c\n", 186, 186);
+    menuOPCAO("", 40);
+    menuOPCAO(" 1 - Cadastrar Aluno", 40);
+    menuOPCAO("", 40);
+    menuOPCAO(" 2 - Remover Aluno", 40);
+    menuOPCAO("", 40);
+    menuOPCAO(" 3 - Editar Aluno", 40);
+    menuOPCAO("", 40);
+    menuOPCAO(" 4 - Listar Alunos Cadastrados", 40);
+    menuOPCAO("", 40);
+    menuOPCAO(" 5 - Ir para menu anterior", 40);
+    menuOPCAO("", 40);
+    menuBAIXO(40);
+    menuCIMA(10);
+    menuOPCAO(" OPCAO: ", 10);
+    menuBAIXO(10);
+    gotoXY(10, 15);
+    scanf("%d", &o);
+    return o;
 }
