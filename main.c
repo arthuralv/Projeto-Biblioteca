@@ -6,7 +6,7 @@
 #include "alunos.h"
 
 main(){
-    int i,j, op = 0;
+    int i,j, op;
 
     printf("\n\n                                ...:::::  BIBLIOTECA CENTRAL DA UEPB ! :::::... \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     printf("     Carregando Sistema...\n\n");
