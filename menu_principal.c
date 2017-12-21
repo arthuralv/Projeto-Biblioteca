@@ -1,54 +1,58 @@
 #include <stdio.h>
-#define C 40
+#include <windows.h>
+#include <conio.h> //Caso esta biblioteca não pegue em sua máquina, deve-se importar manualmente
 
-void menuCIMA();
-void menuBAIXO();
-void menuOPCAO();
+void menuCIMA(int tamanho);
+void menuBAIXO(int tamanho);
+void menuOPCAO(char opcao[], int tamanho);
+//REFERENCIA https://www.youtube.com/watch?v=5FmC9dSaKq0
+void gotoXY(int x, int y);
 
-int menu_principal (){
+int menu_principal() {
     int o;
-    menuCIMA();
-    printf("\n %c                  MENU                  %c\n", 186, 186);
-    printf(" %c                                        %c\n", 186, 186);
-    printf(" %c 1 - Aluno\t\t\t          %c\n", 186, 186, 186);
-    printf(" %c                                        %c\n", 186, 186);
-    printf(" %c 2 - Acervo\t\t\t          %c\n", 186, 186, 186);
-    printf(" %c                                        %c\n", 186, 186);
-    printf(" %c 3 - Emprestimo\t\t          %c\n", 186, 186, 186);
-    printf(" %c                                        %c\n", 186, 186);
-    printf(" %c 4 - Sair\t\t\t          %c\n", 186);
-    printf(" %c                                        %c\n", 186, 186);
-    printf(" %c Opcao: \t\t\t          %c", 186, 186);
-    menuBAIXO();
+    menuCIMA(40);
+    printf(" %c                  MENU                  %c\n", 186, 186);
+    menuOPCAO("", 40);
+    menuOPCAO(" 1 - Menu Alunos", 40);
+    menuOPCAO("", 40);
+    menuOPCAO(" 2 - Menu Acervo", 40);
+    menuOPCAO("", 40);
+    menuOPCAO(" 3 - Menu Emprestimo", 40);
+    menuOPCAO("", 40);
+    menuOPCAO(" 4 - Sair", 40);
+    menuOPCAO("", 40);
+    menuBAIXO(40);
+    menuCIMA(10);
+    menuOPCAO(" OPCAO: ", 10);
+    menuBAIXO(10);
+    gotoXY(10, 13);
     scanf("%d", &o);
     return o;
 }
 
-void menuCIMA(){
+void menuOPCAO(char opcao[], int tamanho) {
+    printf(" %c", 186);
+    printf("%-*s", tamanho, opcao);
+    printf("%c\n", 186);
+}
+
+void menuCIMA(int tamanho) {
     int i;
-    printf("\n %c", 201);
-    for (i = 0 ; i < C ; i++){
+    printf(" %c", 201);
+    for (i = 0 ; i < tamanho; i++)
         printf("%c", 205);
-    }
-    printf("%c", 187);
+    printf("%c\n", 187);
 }
 
-void menuBAIXO(){
+void menuBAIXO(int tamanho) {
     int i;
-    printf("\n %c", 200);
-    for ( i = 0 ; i < C ; i++){
+    printf(" %c", 200);
+    for ( i = 0 ; i < tamanho; i++)
         printf("%c", 205);
-    }
-    printf("%c", 188);
+    printf("%c\n", 188);
 }
 
-void menuOPCAO(char opcao[]){
-    int  cont = 0, i;
-    printf("%c", 188);
-    while (opcao[i] != '\0'){
-        cont++;
-    }
-    printf("");
+void gotoXY(int x,int y){
+    COORD coordenadas = {x, y};
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coordenadas);
 }
-
-

@@ -10,7 +10,6 @@ typedef struct alunos {
     char nome[50];
     char cpf[11];
 } CAD_ALUNOS;
-//Função para gravar registro de funcionários.
 
 void verificadorArquivo(FILE* arquivo);
 
@@ -26,40 +25,81 @@ void cadastrar() {
     do {
         system("cls");
         fflush(stdin);
-        printf("\nMatricula do Aluno: \n");
+        menuCIMA(strlen("Matricula do Aluno: ")+10);
+        menuOPCAO("Matricula do Aluno: ", strlen("Matricula do Aluno: ")+10);
+        gotoXY(0, 2);
+        menuBAIXO(strlen("Matricula do Aluno: ")+10);
+        gotoXY(22, 1);
         scanf("%d", &al.matricula);
+        system("cls");
         fflush(stdin);
-        printf("\nDigite o Nome do Aluno: \n");
+        menuCIMA(strlen("Digite o Nome do Aluno: ")+50);
+        menuOPCAO("Digite o Nome do Aluno: ", strlen("Digite o Nome do Aluno: ")+50);
+        gotoXY(0, 2);
+        menuBAIXO(strlen("Digite o Nome do Aluno: ")+50);
+        gotoXY(26, 1);
         gets(al.nome);
         strupr(al.nome); //Converte o conteúdo digitado em maiúsculo.
         fflush(stdin);
-        printf("\nDigite o CPF do Aluno: \n");
+        system("cls");
+        menuCIMA(strlen("Digite o CPF do Aluno: ")+15);
+        menuOPCAO("Digite o CPF do Aluno: ", strlen("Digite o CPF do Aluno: ")+15);
+        gotoXY(0, 2);
+        menuBAIXO(strlen("Digite o CPF do Aluno: ")+15);
+        gotoXY(25, 1);
         gets(al.cpf);
         strupr(al.cpf);//Converte o conteúdo digitado em maiúsculo.
         fwrite(&al, sizeof(CAD_ALUNOS), 1, arquivo); // o numero 1 representa a quantidade de elementos que desejo gravar na struct
         //SIZEOF passa para a função o tamanho em bytes da struct
-        printf("\n\nRegistro gravado com sucesso!\n\n");
-        printf("\nDeseja Continuar e Inserir um Novo Registro (S/N)?\n");
+        system("cls");
+        menuCIMA(strlen("Registro gravado com sucesso!"));
+        menuOPCAO("\nRegistro gravado com sucesso!\n", strlen("Registro gravado com sucesso!"));
+        gotoXY(0, 2);
+        menuBAIXO(strlen("Registro gravado com sucesso!"));
+        gotoXY(22, 1);
+        system("cls");
+        menuCIMA(strlen("Deseja Continuar e Inserir um Novo Registro (S/N)?  "));
+        menuOPCAO("Deseja Continuar e Inserir um Novo Registro (S/N)?  ", strlen("Deseja Continuar e Inserir um Novo Registro (S/N)? "));
+        gotoXY(0, 2);
+        menuBAIXO(strlen("Deseja Continuar e Inserir um Novo Registro (S/N)?  "));
+        menuCIMA(10);
+        menuOPCAO(" OPCAO: ", 10);
+        menuBAIXO(10);
+        gotoXY(10, 4);
         setbuf(stdin, NULL);
         op = getchar();
         op = toupper(op);
         system("cls");
-        if(op != 'S' && op != 'N') {
-            do {
-                printf("Opção inválida. Digite novamente!\n");
-                printf("\nDeseja Continuar e Inserir um Novo Registro (S/N)?\n");
-                printf("Opção: ");
-                setbuf(stdin, NULL);
-                op = getchar();
-                op = toupper(op);
-                system("cls");
-            } while(op != 'S' && op != 'N');
+        while(op != 'S' && op != 'N') {
+            system("cls");
+            menuCIMA(strlen("Opcao invalida, digite novamente!"));
+            menuOPCAO("Opcao invalida, digite novamente!", strlen("Opcao invalida, digite novamente!"));
+            gotoXY(0, 2);
+            menuBAIXO(strlen("Opcao invalida, digite novamente!"));
+            gotoXY(22, 1);
+            printf("\n\n");
+            system("pause");
+            system("cls");
+            menuCIMA(strlen("Deseja Continuar e Inserir um Novo Registro (S/N)?  "));
+            menuOPCAO("Deseja Continuar e Inserir um Novo Registro (S/N)?  ", strlen("Deseja Continuar e Inserir um Novo Registro (S/N)? "));
+            gotoXY(0, 2);
+            menuBAIXO(strlen("Deseja Continuar e Inserir um Novo Registro (S/N)?  "));
+            menuCIMA(10);
+            menuOPCAO(" OPCAO: ", 10);
+            menuBAIXO(10);
+            gotoXY(10, 4);
+            setbuf(stdin, NULL);
+            op = getchar();
+            op = toupper(op);
+            system("cls");
         }
-    }while(op == 'S');
+    } while(op == 'S');
+
     fclose(arquivo); //Fecha o arquivo que foi aberto.
     system("cls");
 }
-void listaralunos() {
+
+void listarAlunos() {
 
     FILE *arquivo;
     arquivo = fopen("cad_alunos.txt", "rb");
@@ -90,7 +130,7 @@ void editar () {
         system("cls");
         switch(op) {
         case 1:
-            pnome();
+            alterar();
             break;
         case 2:
             printf("Saindo...\n");
@@ -102,47 +142,101 @@ void editar () {
         }
     } while(op != 2);
 }
-pnome() {
+void alterar(){
     CAD_ALUNOS al;
-    char aux[255];
-    printf("\n---------------PROCURAR ALUNOS POR NOME-------------\n\n");
+    //variavel para contar a posição
+    int i=0;
+    //variavel para salvar o que o usuario digitar e comparar com os que está no arquivo
+    char auxiliar[11];
+    printf("\n---------------PROCURAR ALUNOS POR CPF-------------\n\n");
     //Criando um arquivo, com um ponteiro do tipo FILE
-    FILE *arquivo;
-    //Abrindo o arquivo criado e dando o nome cad_alunos para o arquivo
-    //O "a+" é  para abrir salvar no final, e ler os dados do arquivo
-    arquivo = fopen("cad_alunos.txt", "rb");
-    //verificando se o arquivo foi aberto com exito
-    if(arquivo == NULL) {
-        printf("Impossivel Abrir Aquivo!");
-    }
-    else {
-        fflush(stdin);
-        printf("\nDigite o nome que deseja procurar: ");
-        gets(aux);
-
-        while(fread(&al, sizeof(CAD_ALUNOS), 1,arquivo) == 1) {
-            if(strstr(aux, al.nome)) {
-                printf("editar nome: ");
-            }
+    FILE *arquivo = fopen("cad_alunos.txt", "r+b");
+    if(arquivo == NULL){
+        printf("\n Impossivel Abrir o arquivo!\n");
         }
+    else{
+            fflush(stdin);
+            printf("\nDigite o CPF que deseja procurar: ");
+            gets(auxiliar);
+            //lê todos os dados do arquivo até encontrar o final do arquivo (EOF)
+            while(fread(&al, sizeof(CAD_ALUNOS), 1,arquivo)==1){
+                 i++;
+                 //comparar a cpf que o usuario digitou com os que ja estão no arquivo
+                 if(strcmp(auxiliar, al.cpf) == 0){
+                        printf("---------Dados Atuais---------\n");
+                        printf("\nNome do Aluno: %s", al.nome);
+                        printf("\nMatricula do Aluno: %d", al.matricula);
+                        printf("\nCPF Atual: %s\n",al.cpf );
+                        printf("\nDigite o Novo CPF: ");
+                        fflush(stdin);
+                        fgets(al.cpf, 11, stdin);
+                        //O novo cpf que foi digitado vai receber um \0 para indicar o fim
+                        al.cpf[strlen(al.cpf)-1]= '\0';
+                        printf("\nDigite o Novo Nome: ");
+                        fflush(stdin);
+                        fgets(al.nome, 50, stdin);
+                        //O novo nome que foi digitado vai receber um \0 para indicar o fim
+                        al.nome[strlen(al.nome)-1] = '\0';
+                        //vou para a posicao no arquivo que eu quero incluir os novos dados
+                        fseek(arquivo,(i-1)*sizeof(CAD_ALUNOS),SEEK_SET);
+                        //inscrevo os novos dados e verifico se foi feito com sucesso
+                if(fwrite(&al,sizeof(CAD_ALUNOS),1,arquivo) != 1){
+                            printf("\n Falha ao Alterar o registro!\n");
+                            system("pause");
+                }else{
+                            printf("\n Registro alterado com sucesso!\n");
+                        }
+                        break;
+                    }
+                }
     }
     printf("\n\n***************Fim da Edição.***************\n\n");
-    system("pause");
-    system("cls");
+	system("pause");
+	system("cls");
+	fclose(arquivo);
 }
+void excluir(){
+    CAD_ALUNOS al;
+    int i=0;
+    char auxiliar[11];
+    printf("\n---------------EXLUINDO ALUNOS -------------\n\n");
+    //Criando um arquivo, com um ponteiro do tipo FILE
+    FILE *arquivo = fopen("cad_alunos.txt", "r+b");
+    FILE *arq_auxiliar = fopen("auxiliar.txt", "w+b");
+    if(arquivo == NULL || arq_auxiliar == NULL){
+        printf("\n Impossivel Abrir o arquivo!\n");
+        }
+    else{
+            fflush(stdin);
+            printf("\nDigite o CPF que Deseja Excluir: ");
+            gets(auxiliar);
 
+            while(fread(&al, sizeof(CAD_ALUNOS), 1,arquivo)==1){
+                 i++;
+                 if(strcmp(auxiliar, al.cpf) == 0){
+                        al.cpf[sizeof(al.cpf)-1] = '\0';
+                        al.nome[sizeof(al.nome)-1] = '\0';
+                        fseek(arquivo,(i-1)*sizeof(CAD_ALUNOS),SEEK_SET);
+                 }else{
+                    fwrite(&al,sizeof(CAD_ALUNOS),1,arq_auxiliar);
+                 }
+            }
+    printf("\n\n---------------Registro Excluido com sucesso---------------n\n");
+	system("pause");
+	system("cls");
+	fclose(arquivo);
+	fclose(arq_auxiliar);
+	remove("cad_alunos.txt");
+    rename("auxiliar.txt", "cad_alunos.txt");
+    }
+}
 //Função para verificar que opção vai ser usada no menu aluno
 void op_alunos () {
     int o=0;
     struct alunos al;
-    do {
-        printf("\n---------------ALUNOS-------------\n\n");
-        printf("-\t 1 Cadastrar Aluno\t\t\t-\n");
-        printf("-\t 2 Remover Aluno\t\t\t-\n");
-        printf("-\t 3 Editar Aluno\t\t\t-\n");
-        printf("-\t 4 Listar Alunos Cadastrados\t\t\t-\n");
-        printf("-\t 5 Ir para menu anterior\t\t\t-\n\n");
-        scanf("%d", &o);
+    do{
+    menuAluno();
+    scanf("%d", &o);
         system("cls");
         switch(o) {
         case 1:
@@ -155,19 +249,18 @@ void op_alunos () {
             Sleep(1000);
             break;
         case 4:
-            listaralunos(al);
+            listarAlunos(al);
             Sleep(1000);
             break;
         case 5:
             Sleep(1000);
-            menu_principal();
+            return;
         default:
             printf("Opção invalida\n");
             break;
         }
         fflush(stdin);
-    }
-    while(o >= 5);
+    }while(o != 5);
 }
 void verificadorArquivo(FILE *arquivo) {
     if(arquivo == NULL) {
@@ -177,4 +270,27 @@ void verificadorArquivo(FILE *arquivo) {
         Sleep(2000);
         exit(1);
     }
+}
+
+int menuAluno() {
+    int o;
+    menuCIMA(40);
+    printf(" %c                 ALUNOS                 %c\n", 186, 186);
+    menuOPCAO("", 40);
+    menuOPCAO(" 1 - Cadastrar Aluno", 40);
+    menuOPCAO("", 40);
+    menuOPCAO(" 2 - Remover Aluno", 40);
+    menuOPCAO("", 40);
+    menuOPCAO(" 3 - Editar Aluno", 40);
+    menuOPCAO("", 40);
+    menuOPCAO(" 4 - Listar Alunos Cadastrados", 40);
+    menuOPCAO("", 40);
+    menuOPCAO(" 5 - Ir para menu anterior", 40);
+    menuOPCAO("", 40);
+    menuBAIXO(40);
+    menuCIMA(10);
+    menuOPCAO(" OPCAO: ", 10);
+    menuBAIXO(10);
+    gotoXY(10, 15);
+
 }
