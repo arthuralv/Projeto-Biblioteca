@@ -242,7 +242,9 @@ void op_alunos () {
         case 1:
             cadastrar();
             Sleep(1000);
+            break;
         case 2:
+            excluir();
             break;
         case 3:
             editar();
