@@ -12,6 +12,7 @@ typedef struct alunos {
 } CAD_ALUNOS;
 
 void verificadorArquivo(FILE* arquivo);
+void alterar();
 
 void cadastrar() {
     system("cls");

@@ -4,6 +4,7 @@
 #include <windows.h>
 #include "menu_principal.c"
 #include "alunos.h"
+#include "acervo.h"
 
 main(){
     int i,j, op;
@@ -28,9 +29,11 @@ main(){
         system("cls");
         switch(op){
             case 1:
-                op_alunos();break;
+                op_alunos();
+                break;
             case 2:
-                printf("Cadastrar acervo\n\n");break;
+                op_acervo();
+                break;
             case 3:
                 printf("Empréstimos\n\n");break;
             case 4:
