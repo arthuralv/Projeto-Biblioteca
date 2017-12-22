@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <windows.h>
 #include <conio.h> //Caso esta biblioteca não pegue em sua máquina, deve-se importar manualmente
-
 void menuCIMA(int tamanho);
 void menuBAIXO(int tamanho);
 void menuOPCAO(char opcao[], int tamanho);
@@ -26,6 +25,7 @@ int menu_principal() {
     menuOPCAO(" OPCAO: ", 10);
     menuBAIXO(10);
     gotoXY(10, 13);
+    setbuf(stdin, NULL);
     scanf("%d", &o);
     return o;
 }

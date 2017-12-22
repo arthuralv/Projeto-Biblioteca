@@ -10,11 +10,49 @@ typedef struct alunos {
     char nome[50];
     char cpf[11];
 } CAD_ALUNOS;
-//Função para gravar registro de funcionários.
 
 void verificadorArquivo(FILE* arquivo);
+void alterarAlunos();
+void cadastrarAlunos();
+void listarAlunos();
+void editarAlunos();
+void excluirAlunos();
 
-void cadastrar() {
+void op_alunos () {
+    int o = 0;
+    struct alunos al;
+    do {
+        menuAluno();
+        scanf("%d", &o);
+        system("cls");
+        switch(o) {
+        case 1:
+            cadastrarAlunos();
+            break;
+        case 2:
+            excluirAlunos();
+            break;
+        case 3:
+            editarAlunos();
+            break;
+        case 4:
+            listarAlunos(al);
+            break;
+        case 5:
+            return;
+        default:
+            printf("Opção invalida\n");
+            break;
+        }
+        fflush(stdin);
+    } while(o != 5);
+}
+
+
+
+
+
+void cadastrarAlunos() {
     system("cls");
     FILE* arquivo; //FILE (sempre maiuscula), variável do tipo file (arquivo é o nome do ponteiro), nesta linha está sendo criado o ponteiro
     CAD_ALUNOS al;
@@ -52,7 +90,6 @@ void cadastrar() {
         strupr(al.cpf);//Converte o conteúdo digitado em maiúsculo.
         fwrite(&al, sizeof(CAD_ALUNOS), 1, arquivo); // o numero 1 representa a quantidade de elementos que desejo gravar na struct
         //SIZEOF passa para a função o tamanho em bytes da struct
-        system("cls");
         menuCIMA(strlen("Registro gravado com sucesso!"));
         menuOPCAO("\nRegistro gravado com sucesso!\n", strlen("Registro gravado com sucesso!"));
         gotoXY(0, 2);
@@ -70,30 +107,14 @@ void cadastrar() {
         setbuf(stdin, NULL);
         op = getchar();
         op = toupper(op);
-        system("cls");
-        while(op != 'S' && op != 'N') {
+        if(op != 'S' && op != 'N') {
             system("cls");
-            menuCIMA(strlen("Opcao invalida, digite novamente!"));
-            menuOPCAO("Opcao invalida, digite novamente!", strlen("Opcao invalida, digite novamente!"));
-            gotoXY(0, 2);
-            menuBAIXO(strlen("Opcao invalida, digite novamente!"));
-            gotoXY(22, 1);
-            printf("\n\n");
+            printf("\n\n Opcao invalida, tente novamente!\n");
             system("pause");
             system("cls");
-            menuCIMA(strlen("Deseja Continuar e Inserir um Novo Registro (S/N)?  "));
-            menuOPCAO("Deseja Continuar e Inserir um Novo Registro (S/N)?  ", strlen("Deseja Continuar e Inserir um Novo Registro (S/N)? "));
-            gotoXY(0, 2);
-            menuBAIXO(strlen("Deseja Continuar e Inserir um Novo Registro (S/N)?  "));
-            menuCIMA(10);
-            menuOPCAO(" OPCAO: ", 10);
-            menuBAIXO(10);
-            gotoXY(10, 4);
-            setbuf(stdin, NULL);
-            op = getchar();
-            op = toupper(op);
-            system("cls");
         }
+        if (op == 'N')
+            break;
     } while(op == 'S');
 
     fclose(arquivo); //Fecha o arquivo que foi aberto.
@@ -106,108 +127,157 @@ void listarAlunos() {
     arquivo = fopen("cad_alunos.txt", "rb");
     CAD_ALUNOS al;
     verificadorArquivo(arquivo);
-    printf("\n---------------LISTAGEM DE ALUNOS-------------\n\n");
+    menuCIMA(29);
+    menuOPCAO("     LISTAGEM DE ALUNOS", 29);
+    menuBAIXO(29);
     while(fread(&al, sizeof(CAD_ALUNOS), 1,arquivo)==1) {
         printf("\nMatricula: %d\n", al.matricula);
         printf("\nNome: %s\n", al.nome);
         printf("\nCPF: %s\n\n", al.cpf);
-        system("pause");
-
+        printf("---------------------------------------------\n");
     }
 
-    printf("\n--------------- FIM DA LISTAGEM DE ALUNOS-------------\n\n");
+    menuCIMA(31);
+    menuOPCAO("   FIM DA LISTAGEM DE ALUNOS", 31);
+    menuBAIXO(31);
     system("pause");
     system("cls");
 }
-void editar () {
-    int op=0;
 
-    printf("---------PROCURAR ALUNO PARA EDITAR-----------");
+void editarAlunos() {
+    int op = 0;
     do {
-        printf("\n1 - Procurar Por CPF ");
-        printf("\n2 - Sair");
-        printf("\nOpcao: ");
+        menuCIMA(29);
+        menuOPCAO("     LISTAGEM DE ALUNOS", 29);
+        menuOPCAO("", 29);
+        menuOPCAO(" 1 - Procurar Por CPF ", 29);
+        menuOPCAO("", 29);
+        menuOPCAO(" 2 - Sair", 29);
+        menuBAIXO(29);
+        menuCIMA(10);
+        menuOPCAO(" OPCAO: ", 10);
+        menuBAIXO(10);
+        gotoXY(10, 8);
         scanf("%d", &op);
         system("cls");
         switch(op) {
         case 1:
-            pnome();
+            alterarAlunos();
             break;
         case 2:
-            printf("Saindo...\n");
-            Sleep(1000);
             break;
         default:
             printf("\nOpcao invalida\n");
+            system("pause");
             break;
         }
     } while(op != 2);
 }
-pnome() {
+
+void alterarAlunos() {
     CAD_ALUNOS al;
-    char aux[255];
-    printf("\n---------------PROCURAR ALUNOS POR NOME-------------\n\n");
+    //variavel para contar a posição
+    int i=0;
+    //variavel para salvar o que o usuario digitar e comparar com os que está no arquivo
+    char auxiliar[11];
     //Criando um arquivo, com um ponteiro do tipo FILE
-    FILE *arquivo;
-    //Abrindo o arquivo criado e dando o nome cad_alunos para o arquivo
-    //O "a+" é  para abrir salvar no final, e ler os dados do arquivo
-    arquivo = fopen("cad_alunos.txt", "rb");
-    //verificando se o arquivo foi aberto com exito
+    FILE *arquivo = fopen("cad_alunos.txt", "r+b");
     if(arquivo == NULL) {
-        printf("Impossivel Abrir Aquivo!");
+        printf("\n Impossivel Abrir o arquivo!\n");
     }
     else {
         fflush(stdin);
-        printf("\nDigite o nome que deseja procurar: ");
-        gets(aux);
-
-        while(fread(&al, sizeof(CAD_ALUNOS), 1,arquivo) == 1) {
-            if(strstr(aux, al.nome)) {
-                printf("editar nome: ");
+        menuCIMA(30);
+        menuOPCAO("Digite o CPF que deseja procurar: ", 30);
+        menuBAIXO(30);
+        gets(auxiliar);
+        //lê todos os dados do arquivo até encontrar o final do arquivo (EOF)
+        while(fread(&al, sizeof(CAD_ALUNOS), 1,arquivo)==1) {
+            i++;
+            //comparar a cpf que o usuario digitou com os que ja estão no arquivo
+            if(strcmp(auxiliar, al.cpf) == 0) {
+                menuCIMA(32);
+                menuOPCAO("         Dados Atuais         ", 32);
+                menuBAIXO(32);
+                printf("\nNome do Aluno: %s", al.nome);
+                printf("\nMatricula do Aluno: %d", al.matricula);
+                printf("\nCPF Atual: %s\n",al.cpf );
+                printf("\nDigite o Novo CPF: ");
+                fflush(stdin);
+                fgets(al.cpf, 11, stdin);
+                //O novo cpf que foi digitado vai receber um \0 para indicar o fim
+                al.cpf[strlen(al.cpf) - 1]= '\0';
+                printf("\nDigite o Novo Nome: ");
+                fflush(stdin);
+                fgets(al.nome, 50, stdin);
+                //O novo nome que foi digitado vai receber um \0 para indicar o fim
+                al.nome[strlen(al.nome) - 1] = '\0';
+                //vou para a posicao no arquivo que eu quero incluir os novos dados
+                fseek(arquivo,(i-1)*sizeof(CAD_ALUNOS),SEEK_SET);
+                //inscrevo os novos dados e verifico se foi feito com sucesso
+                if(fwrite(&al,sizeof(CAD_ALUNOS),1,arquivo) != 1) {
+                    system("cls");
+                    printf("\n Falha ao Alterar o registro!\n");
+                    system("pause");
+                } else {
+                    system("cls");
+                    printf("\n Registro alterado com sucesso!\n");
+                    system("pause");
+                }
+                break;
             }
         }
     }
-    printf("\n\n***************Fim da Edição.***************\n\n");
+    menuCIMA(32);
+    menuOPCAO("         Fim da Edicao         ", 32);
+    menuBAIXO(32);
     system("pause");
     system("cls");
+    fclose(arquivo);
 }
 
-//Função para verificar que opção vai ser usada no menu aluno
-void op_alunos () {
-    int o = menuAluno();
-    struct alunos al;
-    while(o != 5) {
-        system("cls");
-        switch(o) {
-        case 1:
-            cadastrar();
-            Sleep(1000);
-        case 2:
-            break;
-        case 3:
-            editar();
-            Sleep(1000);
-            break;
-        case 4:
-            listarAlunos(al);
-            Sleep(1000);
-            break;
-        case 5:
-            Sleep(1000);
-            return;
-        default:
-            printf("Opção invalida\n");
-            break;
-        }
+void excluirAlunos() {
+    CAD_ALUNOS al;
+    int i = 0;
+    char auxiliar[11];
+    //Criando um arquivo, com um ponteiro do tipo FILE
+    FILE *arquivo = fopen("cad_alunos.txt", "r+b");
+    FILE *arq_auxiliar = fopen("auxiliar.txt", "w+b");
+    if(arquivo == NULL || arq_auxiliar == NULL) {
+        printf("\n Impossivel Abrir o arquivo!\n");
+    }
+    else {
         fflush(stdin);
+        printf("\nDigite o CPF que deseja excluir: ");
+        gets(auxiliar);
+
+        while(fread(&al, sizeof(CAD_ALUNOS), 1, arquivo) == 1) {
+            i++;
+            if(strcmp(auxiliar, al.cpf) == 0) {
+                al.cpf[sizeof(al.cpf) - 1] = '\0';
+                al.nome[sizeof(al.nome) - 1] = '\0';
+                fseek(arquivo,(i - 1) * sizeof(CAD_ALUNOS),SEEK_SET);
+            } else {
+                fwrite(&al,sizeof(CAD_ALUNOS), 1, arq_auxiliar);
+            }
+        }
+        printf("\n\n--------------- Registro excluido com sucesso ---------------\n");
+        system("pause");
+        system("cls");
+        fclose(arquivo);
+        fclose(arq_auxiliar);
+        remove("cad_alunos.txt");
+        rename("auxiliar.txt", "cad_alunos.txt");
     }
 }
+//Função para verificar que opção vai ser usada no menu aluno
+
 void verificadorArquivo(FILE *arquivo) {
     if(arquivo == NULL) {
         system("cls");
         printf("Ocorreu um erro no sistema. Por favor contate o fabricante! \n\n\n\n");
         printf("Saindo do programa...");
-        Sleep(2000);
+        Sleep(100);
         exit(1);
     }
 }
@@ -232,6 +302,5 @@ int menuAluno() {
     menuOPCAO(" OPCAO: ", 10);
     menuBAIXO(10);
     gotoXY(10, 15);
-    scanf("%d", &o);
-    return o;
+
 }
