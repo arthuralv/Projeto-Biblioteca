@@ -41,7 +41,7 @@ void op_alunos () {
         case 5:
             return;
         default:
-            printf("OpÁ„o invalida\n");
+            printf("Op√ß√£o invalida\n");
             break;
         }
         fflush(stdin);
@@ -54,10 +54,10 @@ void op_alunos () {
 
 void cadastrarAlunos() {
     system("cls");
-    FILE* arquivo; //FILE (sempre maiuscula), vari·vel do tipo file (arquivo È o nome do ponteiro), nesta linha est· sendo criado o ponteiro
+    FILE* arquivo; //FILE (sempre maiuscula), vari√°vel do tipo file (arquivo √© o nome do ponteiro), nesta linha est√° sendo criado o ponteiro
     CAD_ALUNOS al;
-    arquivo = fopen ("cad_alunos.txt", "ab");// "ab" acrescenta dados bin·rios no fim do arquivo e se o arquivo n„o existir ele ser· criado e
-    //e fopen È respons·vel fazer com que o ponteiro aponte para um arquivo no programa
+    arquivo = fopen ("cad_alunos.txt", "ab");// "ab" acrescenta dados bin√°rios no fim do arquivo e se o arquivo n√£o existir ele ser√° criado e
+    //e fopen √© respons√°vel fazer com que o ponteiro aponte para um arquivo no programa
     verificadorArquivo(arquivo);
     char op;
 
@@ -78,7 +78,7 @@ void cadastrarAlunos() {
         menuBAIXO(strlen("Digite o Nome do Aluno: ")+50);
         gotoXY(26, 1);
         gets(al.nome);
-        strupr(al.nome); //Converte o conte˙do digitado em mai˙sculo.
+        strupr(al.nome); //Converte o conte√∫do digitado em mai√∫sculo.
         fflush(stdin);
         system("cls");
         menuCIMA(strlen("Digite o CPF do Aluno: ")+15);
@@ -87,9 +87,9 @@ void cadastrarAlunos() {
         menuBAIXO(strlen("Digite o CPF do Aluno: ")+15);
         gotoXY(25, 1);
         gets(al.cpf);
-        strupr(al.cpf);//Converte o conte˙do digitado em mai˙sculo.
+        strupr(al.cpf);//Converte o conte√∫do digitado em mai√∫sculo.
         fwrite(&al, sizeof(CAD_ALUNOS), 1, arquivo); // o numero 1 representa a quantidade de elementos que desejo gravar na struct
-        //SIZEOF passa para a funÁ„o o tamanho em bytes da struct
+        //SIZEOF passa para a fun√ß√£o o tamanho em bytes da struct
         menuCIMA(strlen("Registro gravado com sucesso!"));
         menuOPCAO("\nRegistro gravado com sucesso!\n", strlen("Registro gravado com sucesso!"));
         gotoXY(0, 2);
@@ -176,9 +176,9 @@ void editarAlunos() {
 
 void alterarAlunos() {
     CAD_ALUNOS al;
-    //variavel para contar a posiÁ„o
+    //variavel para contar a posi√ß√£o
     int i=0;
-    //variavel para salvar o que o usuario digitar e comparar com os que est· no arquivo
+    //variavel para salvar o que o usuario digitar e comparar com os que est√° no arquivo
     char auxiliar[11];
     //Criando um arquivo, com um ponteiro do tipo FILE
     FILE *arquivo = fopen("cad_alunos.txt", "r+b");
@@ -191,10 +191,10 @@ void alterarAlunos() {
         menuOPCAO("Digite o CPF que deseja procurar: ", 30);
         menuBAIXO(30);
         gets(auxiliar);
-        //lÍ todos os dados do arquivo atÈ encontrar o final do arquivo (EOF)
+        //l√™ todos os dados do arquivo at√© encontrar o final do arquivo (EOF)
         while(fread(&al, sizeof(CAD_ALUNOS), 1,arquivo)==1) {
             i++;
-            //comparar a cpf que o usuario digitou com os que ja est„o no arquivo
+            //comparar a cpf que o usuario digitou com os que ja est√£o no arquivo
             if(strcmp(auxiliar, al.cpf) == 0) {
                 menuCIMA(32);
                 menuOPCAO("         Dados Atuais         ", 32);
@@ -270,7 +270,7 @@ void excluirAlunos() {
         rename("auxiliar.txt", "cad_alunos.txt");
     }
 }
-//FunÁ„o para verificar que opÁ„o vai ser usada no menu aluno
+//Fun√ß√£o para verificar que op√ß√£o vai ser usada no menu aluno
 
 void verificadorArquivo(FILE *arquivo) {
     if(arquivo == NULL) {

@@ -46,7 +46,7 @@ void op_acervo () {
         case 5:
             return;
         default:
-            printf("OpÁ„o invalida\n");
+            printf("Op√ß√£o invalida\n");
             break;
         }
         fflush(stdin);
@@ -71,10 +71,10 @@ int contadorCod() {
 void cadastrarLivros() {
     system("cls");
     int aux = 0;
-    FILE* arquivo; //FILE (sempre maiuscula), vari·vel do tipo file (arquivo È o nome do ponteiro), nesta linha est· sendo criado o ponteiro
+    FILE* arquivo; //FILE (sempre maiuscula), vari√°vel do tipo file (arquivo √© o nome do ponteiro), nesta linha est√° sendo criado o ponteiro
     CAD_LIVROS livros;
-    arquivo = fopen ("cad_livros.txt", "ab");// "ab" acrescenta dados bin·rios no fim do arquivo e se o arquivo n„o existir ele ser· criado e
-    //e fopen È respons·vel fazer com que o ponteiro aponte para um arquivo no programa
+    arquivo = fopen ("cad_livros.txt", "ab");// "ab" acrescenta dados bin√°rios no fim do arquivo e se o arquivo n√£o existir ele ser√° criado e
+    //e fopen √© respons√°vel fazer com que o ponteiro aponte para um arquivo no programa
     verificadorArquivo(arquivo);
     char op;
     aux = contadorCod();
@@ -108,7 +108,7 @@ void cadastrarLivros() {
         menuBAIXO(strlen("Digite o Nome do livro: ") + 50);
         gotoXY(26, 1);
         gets(livros.nome_livro);
-        strupr(livros.nome_livro); //Converte o conte˙do digitado em mai˙sculo.
+        strupr(livros.nome_livro); //Converte o conte√∫do digitado em mai√∫sculo.
         fflush(stdin);
         system("cls");
         menuCIMA(strlen("Digite o Nome do Autor do livro: ") + 15);
@@ -117,7 +117,7 @@ void cadastrarLivros() {
         menuBAIXO(strlen("Digite o Nome do Autor do livro: ") + 15);
         gotoXY(31, 1);
         gets(livros.nome_autor);
-        strupr(livros.nome_autor);//Converte o conte˙do digitado em mai˙sculo.
+        strupr(livros.nome_autor);//Converte o conte√∫do digitado em mai√∫sculo.
         system("cls");
         fflush(stdin);
         menuCIMA(strlen("Quantidade de Livros: ") + 10);
@@ -127,7 +127,7 @@ void cadastrarLivros() {
         gotoXY(24, 1);
         scanf("%d", &livros.quantidade);
         fwrite(&livros, sizeof(CAD_LIVROS), 1, arquivo); // o numero 1 representa a quantidade de elementos que desejo gravar na struct
-        //SIZEOF passa para a funÁ„o o tamanho em bytes da struct
+        //SIZEOF passa para a fun√ß√£o o tamanho em bytes da struct
         system("cls");
         gotoXY(0, 2);
         printf("Livro gravado com sucesso!\n");
@@ -212,9 +212,9 @@ void listarLivros() {
 }
 void procurarLivros() {
     CAD_LIVROS livros;
-    //variavel para contar a posiÁ„o
+    //variavel para contar a posi√ß√£o
     int i=0, op=0;
-    //variavel para salvar o que o usuario digitar e comparar com os que est· no arquivo
+    //variavel para salvar o que o usuario digitar e comparar com os que est√° no arquivo
     char auxiliar[11];
     //Criando um arquivo, com um ponteiro do tipo FILE
     FILE *arquivo = fopen("cad_livros.txt", "r+b");
@@ -229,10 +229,10 @@ void procurarLivros() {
         gets(auxiliar);
         strupr(auxiliar);
         system("cls");
-        //lÍ todos os dados do arquivo atÈ encontrar o final do arquivo (EOF)
+        //l√™ todos os dados do arquivo at√© encontrar o final do arquivo (EOF)
         while(fread(&livros, sizeof(CAD_LIVROS), 1,arquivo)==1) {
             i++;
-            //comparar a cpf que o usuario digitou com os que ja est„o no arquivo
+            //comparar a cpf que o usuario digitou com os que ja est√£o no arquivo
             if(strcmp(auxiliar, livros.nome_livro) == 0) {
                 menuCIMA(32);
                 menuOPCAO("         DADOS ATUAIS         ", 32);

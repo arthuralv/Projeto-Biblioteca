@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <windows.h>
-#include <conio.h> //Caso esta biblioteca n„o pegue em sua m·quina, deve-se importar manualmente
+#include <conio.h> //Caso esta biblioteca n√£o pegue em sua m√°quina, deve-se importar manualmente
 void menuCIMA(int tamanho);
 void menuBAIXO(int tamanho);
 void menuOPCAO(char opcao[], int tamanho);
