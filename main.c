@@ -5,15 +5,16 @@
 #include "menu_principal.c"
 #include "alunos.h"
 #include "acervo.h"
+#include "emprestimos.h"
 
 main() {
     int i,j, op;
     menuCIMA(116);
-    printf("                                ...:::::  BIBLIOTECA CENTRAL DA UEPB ! :::::... ");
+    printf("                                    ...:::::  BIBLIOTECA CENTRAL DA UEPB  :::::...");
     gotoXY(0, 25);
-    menuCIMA(21);
-    menuOPCAO("Carregando Sistema...", 21);
-    menuBAIXO(21);
+    menuCIMA(23);
+    menuOPCAO(" Carregando Sistema...", 23);
+    menuBAIXO(23);
     for (i = 1; i <= 50; i++) {
         printf ("  %d%%\r", i*2);
         for (j = 0; j < i; j++) {
@@ -23,12 +24,12 @@ main() {
             Sleep(2);
         }
     }
-    system("cls");
     gotoXY(26, 27);
     system("cls");
     do {
         op = menu_principal();
         system("cls");
+        setbuf(stdin, NULL);
         switch(op) {
         case 1:
             op_alunos();
@@ -37,11 +38,13 @@ main() {
             op_acervo();
             break;
         case 3:
-            printf("Emprestimos\n\n");
+            op_emprestimos();
             break;
         case 4:
-            printf("\n\n\t\tObrigado por usar nosso sistema!\n\n");
-            Sleep(1000);
+            menuCIMA(24);
+            menuOPCAO(" Finalizando Sistema...", 24);
+            menuBAIXO(24);
+            system("pause");
             exit(0);
         default:
             system("cls");

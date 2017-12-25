@@ -78,8 +78,7 @@ void cadastrarLivros() {
     verificadorArquivo(arquivo);
     char op;
     aux = contadorCod();
-    do {
-        cod_livro++;
+
         system("cls");
         fflush(stdin);
         menuCIMA(strlen("Codigo do Livro: ")+10);
@@ -87,9 +86,9 @@ void cadastrarLivros() {
         gotoXY(0, 2);
         menuBAIXO(strlen("Codigo do livro: ")+10);
         gotoXY(22, 1);
-        cod_livro = cod_livro + aux;
-        printf("%d\n\n", cod_livro);
-        livros.codigo = cod_livro;
+        aux = aux + cod_livro;
+        printf("%d\n\n", aux);
+        livros.codigo = aux;
         system("pause");
         system("cls");
         fflush(stdin);
@@ -102,58 +101,40 @@ void cadastrarLivros() {
         strupr(livros.area);
         system("cls");
         fflush(stdin);
-        menuCIMA(strlen("Digite o Nome do livro: ") + 50);
-        menuOPCAO("Digite o Nome do livro: ", strlen("Digite o Nome do livro: ") + 50);
+        menuCIMA(strlen("Digite o Nome do livro: ") + 80);
+        menuOPCAO("Digite o Nome do livro: ", strlen("Digite o Nome do livro: ") + 80);
         gotoXY(0, 2);
-        menuBAIXO(strlen("Digite o Nome do livro: ") + 50);
+        menuBAIXO(strlen("Digite o Nome do livro: ") + 80);
         gotoXY(26, 1);
         gets(livros.nome_livro);
         strupr(livros.nome_livro); //Converte o conteúdo digitado em maiúsculo.
         fflush(stdin);
         system("cls");
-        menuCIMA(strlen("Digite o Nome do Autor do livro: ") + 15);
-        menuOPCAO("Digite o Nome do Autor do livro: ", strlen("Digite o Nome do Autor do livro: ") + 15);
+        menuCIMA(strlen("Digite o Nome do Autor do livro: ") + 35);
+        menuOPCAO("Digite o Nome do Autor do livro: ", strlen("Digite o Nome do Autor do livro: ") + 35);
         gotoXY(0, 2);
-        menuBAIXO(strlen("Digite o Nome do Autor do livro: ") + 15);
-        gotoXY(31, 1);
+        menuBAIXO(strlen("Digite o Nome do Autor do livro: ") + 35);
+        gotoXY(35, 1);
         gets(livros.nome_autor);
         strupr(livros.nome_autor);//Converte o conteúdo digitado em maiúsculo.
         system("cls");
-        fflush(stdin);
-        menuCIMA(strlen("Quantidade de Livros: ") + 10);
-        menuOPCAO("Quantidade de Livros: ", strlen("Quantidade de Livros: ") + 10);
-        gotoXY(0, 2);
-        menuBAIXO(strlen("Quantidade de Livros: ") + 10);
-        gotoXY(24, 1);
-        scanf("%d", &livros.quantidade);
+        do{
+            fflush(stdin);
+            menuCIMA(strlen("Quantidade de Livros: ") + 10);
+            menuOPCAO("Quantidade de Livros: ", strlen("Quantidade de Livros: ") + 10);
+            gotoXY(0, 2);
+            menuBAIXO(strlen("Quantidade de Livros: ") + 10);
+            gotoXY(24, 1);
+            scanf("%d", &livros.quantidade);
+
+        }while(livros.quantidade <= 0);
         fwrite(&livros, sizeof(CAD_LIVROS), 1, arquivo); // o numero 1 representa a quantidade de elementos que desejo gravar na struct
         //SIZEOF passa para a função o tamanho em bytes da struct
         system("cls");
         gotoXY(0, 2);
         printf("Livro gravado com sucesso!\n");
         gotoXY(22, 1);
-        system("cls");
-        menuCIMA(strlen("Deseja Continuar e Inserir um Novo Livro (S/N)?  "));
-        menuOPCAO("Deseja Continuar e Inserir um Novo Livro (S/N)?  ", strlen("Deseja Continuar e Inserir um Novo Livro (S/N)? "));
-        gotoXY(0, 2);
-        menuBAIXO(strlen("Deseja Continuar e Inserir um Novo Livro (S/N)?  "));
-        menuCIMA(10);
-        menuOPCAO(" OPCAO: ", 10);
-        menuBAIXO(10);
-        gotoXY(10, 4);
-        setbuf(stdin, NULL);
-        op = getchar();
-        op = toupper(op);
-        system("cls");
-        if(op != 'S' && op != 'N') {
-            system("cls");
-            printf("\n\n Opcao invalida, tente novamente!");
-            system("pause");
-            system("cls");
-        }
-        if (op == 'N')
-            break;
-    } while(op == 'S');
+
 
     fclose(arquivo); //Fecha o arquivo que foi aberto.
     system("cls");
@@ -170,6 +151,7 @@ void editarLivros() {
         printf("\n2 - Sair");
         printf("\nOpcao: ");
         scanf("%d", &op);
+        setbuf(stdin, NULL);
         system("cls");
         switch(op) {
         case 1:
@@ -223,9 +205,9 @@ void procurarLivros() {
     }
     else {
         fflush(stdin);
-        menuCIMA(45);
+        menuCIMA(60);
         printf("\nDigite o Nome do Livro que deseja procurar: ");
-        menuBAIXO(45);
+        menuBAIXO(60);
         gets(auxiliar);
         strupr(auxiliar);
         system("cls");
@@ -312,7 +294,7 @@ void procurarLivros() {
 
 void excluirLivros() {
     CAD_LIVROS li;
-    int i = 0;
+    int i = 0, j;
     char auxiliar[11];
     //Criando um arquivo, com um ponteiro do tipo FILE
     FILE *arquivo = fopen("cad_livros.txt", "r+b");
@@ -322,32 +304,42 @@ void excluirLivros() {
     }
     else {
         fflush(stdin);
-        menuCIMA(45);
-        menuOPCAO("Digite o Nome do Livro que Deseja Excluir:    ", 45);
-        menuBAIXO(45);
+        menuCIMA(60);
+        menuOPCAO("Digite o Nome do Livro que Deseja Excluir:    ", 60);
+        menuBAIXO(60);
         gets(auxiliar);
+        strupr(auxiliar);
 
         while(fread(&li, sizeof(CAD_LIVROS), 1,arquivo)==1) {
             i++;
             if(strcmp(auxiliar, li.nome_livro) == 0) {
-                li.nome_livro[sizeof(li.nome_livro) - 1] = '\0';
-                li.nome_autor[sizeof(li.nome_autor) - 1] = '\0';
-                li.area[sizeof(li.area)-1] = '\0';
-                li.quantidade = 0;
+                j = 1;
                 fseek(arquivo,(i-1) * sizeof(CAD_LIVROS), SEEK_SET);
             } else {
                 fwrite( &li, sizeof(CAD_LIVROS), 1, arq_auxiliar);
             }
         }
-        menuCIMA(60);
-        menuOPCAO("         Livro excluido com Sucesso         ", 60);
-        menuBAIXO(60);
-        system("pause");
-        system("cls");
         fclose(arquivo);
         fclose(arq_auxiliar);
-        remove("cad_livros.txt");
+        if(j =1){
+            printf("livro encontrado\n");
+        }
+        if(remove("cad_livros.txt")==0){
+            menuCIMA(60);
+            menuOPCAO("         Livro excluido com Sucesso         ", 60);
+            menuBAIXO(60);
+        }else{
+            menuCIMA(60);
+            menuOPCAO("         Nao foi possivel excluir o arquivo         ", 60);
+            menuBAIXO(60);
+            printf("\n\n%s\n\n", strerror(errno));
+        }
         rename("auxiliar.txt", "cad_livros.txt");
+
+        system("pause");
+        system("cls");
+
+
     }
 }
 
