@@ -8,7 +8,7 @@
 #include "emprestimos.h"
 
 main() {
-    int i,j, op;
+    int i, j, op;
     menuCIMA(116);
     printf("                                    ...:::::  BIBLIOTECA CENTRAL DA UEPB  :::::...");
     gotoXY(0, 25);

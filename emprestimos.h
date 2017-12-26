@@ -1,7 +1,6 @@
 #ifndef EMPRESTIMOS_H_INCLUDED
 #define EMPRESTIMOS_H_INCLUDED
 #endif // EMPRESTIMOS_H_INCLUDED
-
 #include <stdio.h>
 #include <windows.h>
 #include <dos.h>
@@ -152,7 +151,7 @@ void cadastrarEmprestimos() {
         }
         if(i >= 2) {
             system("cls");
-            printf("\n\n Nao foi possivel realizar o Emprestimo aluno, devido a quantidade maxima de Emprestimos\n");
+            printf("\n\n  Nao foi possivel realizar o Emprestimo aluno, devido a quantidade maxima de Emprestimos\n\n");
             system("pause");
             return;
         } else {
@@ -206,14 +205,14 @@ void cadastrarEmprestimos() {
 }
 
 void listartodos() {
+    int x = 0;
     FILE *arquivo;
     arquivo = fopen("emprestimos", "rb");
     CAD_EMP em;
-    verificadorArquivo(arquivo);
     menuCIMA(27);
     menuOPCAO("  LISTAGEM DE EMPRESTIMOS", 27);
     menuBAIXO(27);
-    while(fread(&em, sizeof(CAD_EMP), 1,arquivo)==1) {
+    while(fread(&em, sizeof(CAD_EMP), 1,arquivo) == 1) {
         printf("\n Codigo do Emprestimo: %d\n", em.cod_emprestimo);
         printf("\n Matricula do Aluno: %d\n", em.matricula_aluno);
         printf("\n Nome do Aluno: %s\n", em.nome_aluno);
@@ -222,6 +221,10 @@ void listartodos() {
         printf("\n Data do Emprestimo do Livro: %d/%d/%d\n", em.dia_em, em.mes_em, em.ano_em);
         printf("\n Data da Devolucao do Livro: %d/%d/%d\n\n", em.diadev, em.mesdev, em.anodev);
         printf("---------------------------------------------\n\n");
+        x++;
+    }
+    if(x == 0){
+        printf("\n\n  LISTA VAZIA!\n");
     }
     menuCIMA(32);
     menuOPCAO(" FIM DA LISTAGEM DE EMPRESTIMOS", 32);
@@ -231,11 +234,10 @@ void listartodos() {
 }
 
 void listar_por_Alunos() {
-    int aux;
+    int aux, x = 0;
     FILE *arquivo;
     arquivo = fopen("emprestimos", "rb");
     CAD_EMP em;
-    verificadorArquivo(arquivo);
     menuCIMA(36);
     menuOPCAO(" LISTAGEM DE EMPRESTIMOS POR ALUNO", 36);
     menuBAIXO(36);
@@ -250,7 +252,11 @@ void listar_por_Alunos() {
             printf("\n Data do Emprestimo do Livro: %d/%d/%d\n", em.dia_em, em.mes_em, em.ano_em);
             printf("\n Data da Devolucao do Livro: %d/%d/%d\n\n", em.diadev, em.mesdev, em.anodev);
             printf("---------------------------------------------\n\n");
+            x++;
         }
+    }
+    if(x == 0){
+        printf("\n\n  LISTA VAZIA!\n");
     }
     menuCIMA(32);
     menuOPCAO(" FIM DA LISTAGEM DE EMPRESTIMOS", 32);
@@ -261,11 +267,10 @@ void listar_por_Alunos() {
 }
 
 void listar_por_livros() {
-    int aux;
+    int aux, x = 0;
     FILE *arquivo;
     arquivo = fopen("emprestimos", "rb");
     CAD_EMP em;
-    verificadorArquivo(arquivo);
     menuCIMA(36);
     menuOPCAO(" LISTAGEM DE EMPRESTIMOS POR LIVRO", 36);
     menuBAIXO(36);
@@ -280,7 +285,11 @@ void listar_por_livros() {
             printf("\n Data do Emprestimo do Livro: %d/%d/%d\n", em.dia_em, em.mes_em, em.ano_em);
             printf("\n Data da Devolucao do Livro: %d/%d/%d\n\n", em.diadev, em.mesdev, em.anodev);
             printf("---------------------------------------------\n\n");
+            x++;
         }
+    }
+    if(x == 0){
+        printf("\n\n  LISTA VAZIA!\n");
     }
     menuCIMA(32);
     menuOPCAO(" FIM DA LISTAGEM DE EMPRESTIMOS", 32);
@@ -322,6 +331,7 @@ void listar_emprestimos() {
             listar_por_Alunos();
             break;
         case 4:
+            return;
             break;
         default:
             printf("\n\n  Opcao invalida\n");
@@ -357,10 +367,7 @@ void devolucao() {
     while(fread(&li, sizeof(CAD_LIVROS), 1, livro) == 1) {
         i++;
         if(em.cod_livro == li.codigo) {
-            li.quantidade++;
-            li.nome_autor[strlen(li.nome_autor) - 1] = '\0';
-            li.nome_livro[strlen(li.nome_livro) - 1] = '\0';
-            li.area[strlen(li.area) - 1] = '\0';
+            li.quantidade = li.quantidade + 1;
             fseek(livro,(i-1)*sizeof(CAD_LIVROS),SEEK_SET);
             if(fwrite(&li, sizeof(CAD_LIVROS), 1, livro) != 1) {
                 menuCIMA(27);
@@ -380,7 +387,7 @@ void devolucao() {
     system("cls");
 }
 
-void excluirEmprestimo() {
+void cancelar() {
     CAD_EMP em;
     int i = 0;
     int auxiliar;
@@ -391,7 +398,7 @@ void excluirEmprestimo() {
         printf("\n\n Impossivel abrir o arquivo!\n");
     } else {
         fflush(stdin);
-        printf("\n\n  Digite o Codigo do Emprestimo que deseja excluir: ");
+        printf("\n\n  Digite o Codigo do Emprestimo que deseja Cancelar: ");
         scanf("%d", &auxiliar);
 
         while(fread(&em, sizeof(CAD_EMP), 1, arquivo) == 1) {
@@ -407,11 +414,11 @@ void excluirEmprestimo() {
         if(remove("emprestimos") == 0) {
             rename("auxiliar", "emprestimos");
             menuCIMA(40);
-            menuOPCAO("Emprestimo excluido com sucesso", 40);
+            menuOPCAO("Emprestimo Cancelado com Sucesso", 40);
             menuBAIXO(40);
             system("pause");
         } else {
-            printf("Nao foi possivel excluir o Emprestimo!\n");
+            printf("Nao foi possivel Cancelar o Emprestimo!\n");
             printf("\n\n%s\n\n", strerror(errno));
             system("pause");
         }
@@ -452,6 +459,7 @@ void op_emprestimos () {
             devolucao();
             break;
         case 3:
+            cancelar();
             break;
         case 4:
             listar_emprestimos();

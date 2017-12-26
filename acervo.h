@@ -46,7 +46,9 @@ void op_acervo () {
         case 5:
             return;
         default:
-            printf("Opção invalida\n");
+            system("cls");
+            printf("\nOpcao invalida\n");
+            system("pause");
             break;
         }
         fflush(stdin);
@@ -79,75 +81,75 @@ void cadastrarLivros() {
     char op;
     aux = contadorCod();
 
-        system("cls");
+    system("cls");
+    fflush(stdin);
+    menuCIMA(strlen("Codigo do Livro: ")+10);
+    menuOPCAO("Codigo do livro: ", strlen("Codigo do livro: ")+10);
+    gotoXY(0, 2);
+    menuBAIXO(strlen("Codigo do livro: ")+10);
+    gotoXY(22, 1);
+    aux = aux + cod_livro;
+    printf("%d\n\n", aux);
+    livros.codigo = aux;
+    system("pause");
+    system("cls");
+    fflush(stdin);
+    menuCIMA(strlen("Area do Livro: ") + 10);
+    menuOPCAO("Area do livro: ", strlen("Area do livro: ") + 10);
+    gotoXY(0, 2);
+    menuBAIXO(strlen("Area do livro: ") + 10);
+    gotoXY(17, 1);
+    scanf("%s", &livros.area);
+    strupr(livros.area);
+    system("cls");
+    fflush(stdin);
+    menuCIMA(strlen("Digite o Nome do livro: ") + 80);
+    menuOPCAO("Digite o Nome do livro: ", strlen("Digite o Nome do livro: ") + 80);
+    gotoXY(0, 2);
+    menuBAIXO(strlen("Digite o Nome do livro: ") + 80);
+    gotoXY(26, 1);
+    gets(livros.nome_livro);
+    strupr(livros.nome_livro); //Converte o conteúdo digitado em maiúsculo.
+    fflush(stdin);
+    system("cls");
+    menuCIMA(strlen("Digite o Nome do Autor do livro: ") + 35);
+    menuOPCAO("Digite o Nome do Autor do livro: ", strlen("Digite o Nome do Autor do livro: ") + 35);
+    gotoXY(0, 2);
+    menuBAIXO(strlen("Digite o Nome do Autor do livro: ") + 35);
+    gotoXY(35, 1);
+    gets(livros.nome_autor);
+    strupr(livros.nome_autor);//Converte o conteúdo digitado em maiúsculo.
+    system("cls");
+    do {
         fflush(stdin);
-        menuCIMA(strlen("Codigo do Livro: ")+10);
-        menuOPCAO("Codigo do livro: ", strlen("Codigo do livro: ")+10);
+        menuCIMA(strlen("Quantidade de Livros: ") + 10);
+        menuOPCAO("Quantidade de Livros: ", strlen("Quantidade de Livros: ") + 10);
         gotoXY(0, 2);
-        menuBAIXO(strlen("Codigo do livro: ")+10);
-        gotoXY(22, 1);
-        aux = aux + cod_livro;
-        printf("%d\n\n", aux);
-        livros.codigo = aux;
-        system("pause");
-        system("cls");
-        fflush(stdin);
-        menuCIMA(strlen("Area do Livro: ") + 10);
-        menuOPCAO("Area do livro: ", strlen("Area do livro: ") + 10);
-        gotoXY(0, 2);
-        menuBAIXO(strlen("Area do livro: ") + 10);
-        gotoXY(17, 1);
-        scanf("%s", &livros.area);
-        strupr(livros.area);
-        system("cls");
-        fflush(stdin);
-        menuCIMA(strlen("Digite o Nome do livro: ") + 80);
-        menuOPCAO("Digite o Nome do livro: ", strlen("Digite o Nome do livro: ") + 80);
-        gotoXY(0, 2);
-        menuBAIXO(strlen("Digite o Nome do livro: ") + 80);
-        gotoXY(26, 1);
-        gets(livros.nome_livro);
-        strupr(livros.nome_livro); //Converte o conteúdo digitado em maiúsculo.
-        fflush(stdin);
-        system("cls");
-        menuCIMA(strlen("Digite o Nome do Autor do livro: ") + 35);
-        menuOPCAO("Digite o Nome do Autor do livro: ", strlen("Digite o Nome do Autor do livro: ") + 35);
-        gotoXY(0, 2);
-        menuBAIXO(strlen("Digite o Nome do Autor do livro: ") + 35);
-        gotoXY(35, 1);
-        gets(livros.nome_autor);
-        strupr(livros.nome_autor);//Converte o conteúdo digitado em maiúsculo.
-        system("cls");
-        do{
-            fflush(stdin);
-            menuCIMA(strlen("Quantidade de Livros: ") + 10);
-            menuOPCAO("Quantidade de Livros: ", strlen("Quantidade de Livros: ") + 10);
-            gotoXY(0, 2);
-            menuBAIXO(strlen("Quantidade de Livros: ") + 10);
-            gotoXY(24, 1);
-            scanf("%d", &livros.quantidade);
+        menuBAIXO(strlen("Quantidade de Livros: ") + 10);
+        gotoXY(24, 1);
+        scanf("%d", &livros.quantidade);
 
-        }while(livros.quantidade <= 0);
-        fwrite(&livros, sizeof(CAD_LIVROS), 1, arquivo); // o numero 1 representa a quantidade de elementos que desejo gravar na struct
-        //SIZEOF passa para a função o tamanho em bytes da struct
-        system("cls");
-        gotoXY(0, 2);
-        printf("Livro gravado com sucesso!\n");
-        gotoXY(22, 1);
-
+    } while(livros.quantidade <= 0);
+    fwrite(&livros, sizeof(CAD_LIVROS), 1, arquivo); // o numero 1 representa a quantidade de elementos que desejo gravar na struct
+    //SIZEOF passa para a função o tamanho em bytes da struct
+    system("cls");
+    gotoXY(0, 2);
+    printf("Livro gravado com sucesso!\n");
+    gotoXY(22, 1);
+    puts("\n\n");
+    system("pause");
 
     fclose(arquivo); //Fecha o arquivo que foi aberto.
     system("cls");
 }
 
-
 void editarLivros() {
     int op = 0;
     menuCIMA(32);
-    menuOPCAO("         PROCURAR ALUNOS PARA EDITAR         ", 32);
+    menuOPCAO("         PROCURAR LIVROS PARA EDITAR         ", 32);
     menuBAIXO(32);
     do {
-        printf("\n1 - Procurar Por Nome do livro ");
+        printf("\n1 - Procurar Por Codigo do livro ");
         printf("\n2 - Sair");
         printf("\nOpcao: ");
         scanf("%d", &op);
@@ -158,6 +160,7 @@ void editarLivros() {
             procurarLivros();
             break;
         case 2:
+            return;
             break;
         default:
             system("cls");
@@ -168,54 +171,56 @@ void editarLivros() {
     } while(op != 2);
 }
 
-
 void listarLivros() {
+    int x = 0;
     FILE *arquivo;
     arquivo = fopen("cad_livros.txt", "rb");
     CAD_LIVROS livros;
-    verificadorArquivo(arquivo);
     menuCIMA(29);
     menuOPCAO("     LISTAGEM DE LIVROS", 29);
     menuBAIXO(29);
     while(fread(&livros, sizeof(CAD_LIVROS), 1,arquivo)==1) {
-        printf("\nCodigo do Livro: %d\n", livros.codigo);
-        printf("\nNome do Livro: %s\n", livros.nome_livro);
-        printf("\nNome do Autor do Livro: %s\n", livros.nome_autor);
-        printf("\nArea que o Livro se encaixa: %s\n", livros.area);
-        printf("\nQuantidade de Livros no Acervo: %d\n\n", livros.quantidade);
-        printf("---------------------------------------------\n");
+        printf("\n Codigo do Livro: %d\n", livros.codigo);
+        printf("\n Nome do Livro: %s\n", livros.nome_livro);
+        printf("\n Nome do Autor do Livro: %s\n", livros.nome_autor);
+        printf("\n Area que o Livro se encaixa: %s\n", livros.area);
+        printf("\n Quantidade de Livros no Acervo: %d\n\n", livros.quantidade);
+        printf(" ---------------------------------------------\n");
+        x++;
     }
-
+    if(x == 0) {
+        printf("\n\n  LISTA VAZIA!\n");
+    }
     menuCIMA(31);
     menuOPCAO("   FIM DA LISTAGEM DE LIVROS", 31);
     menuBAIXO(31);
     system("pause");
     system("cls");
 }
+
 void procurarLivros() {
     CAD_LIVROS livros;
     //variavel para contar a posição
     int i=0, op=0;
     //variavel para salvar o que o usuario digitar e comparar com os que está no arquivo
-    char auxiliar[11];
+    int auxiliar;
     //Criando um arquivo, com um ponteiro do tipo FILE
     FILE *arquivo = fopen("cad_livros.txt", "r+b");
     if(arquivo == NULL) {
         printf("\n Impossivel Abrir o arquivo!\n");
-    }
-    else {
+    } else {
         fflush(stdin);
-        menuCIMA(60);
-        printf("\nDigite o Nome do Livro que deseja procurar: ");
-        menuBAIXO(60);
-        gets(auxiliar);
-        strupr(auxiliar);
+        menuCIMA(57);
+        menuOPCAO("Digite o Codigo do Livro que Deseja Procurar: ", 57);
+        menuBAIXO(57);
+        gotoXY(48, 1);
+        scanf("%d", &auxiliar);
         system("cls");
         //lê todos os dados do arquivo até encontrar o final do arquivo (EOF)
         while(fread(&livros, sizeof(CAD_LIVROS), 1,arquivo)==1) {
             i++;
             //comparar a cpf que o usuario digitou com os que ja estão no arquivo
-            if(strcmp(auxiliar, livros.nome_livro) == 0) {
+            if(auxiliar == livros.codigo) {
                 menuCIMA(32);
                 menuOPCAO("         DADOS ATUAIS         ", 32);
                 menuBAIXO(32);
@@ -235,12 +240,18 @@ void procurarLivros() {
                 menuCIMA(10);
                 menuOPCAO(" OPCAO: ", 10);
                 menuBAIXO(10);
+                gotoXY(10, 20);
                 scanf("%d", &op);
                 system("cls");
                 switch(op) {
                 case 1:
+
                     fflush(stdin);
-                    printf("\nDigite o Novo Nome do Livro: ");
+                    menuCIMA(strlen("Digite o Novo Nome do Livro: ") + 30);
+                    menuOPCAO("Digite o Novo Nome do Livro: ", strlen("Digite o Novo Nome do Livro: ") + 30);
+                    gotoXY(0, 2);
+                    menuBAIXO(strlen("Digite o Novo Nome do Livro: ") + 30);
+                    gotoXY(strlen("Digite o Novo Nome do Livro:   "), 1);
                     fgets(livros.nome_livro, 50, stdin);
                     //O novo campo que foi digitado vai receber um \0 para indicar o fim
                     livros.nome_livro[strlen(livros.nome_livro) - 1]= '\0';
@@ -248,7 +259,11 @@ void procurarLivros() {
                     break;
                 case 2:
                     fflush(stdin);
-                    printf("\nDigite o Novo Nome do Autor do Livro: ");
+                    menuCIMA(strlen("Digite o Novo Nome do Autor do Livro: ") + 30);
+                    menuOPCAO("Digite o Novo Nome do Autor do Livro: ", strlen("Digite o Novo Nome do Autor do Livro: ") + 30);
+                    gotoXY(0, 2);
+                    menuBAIXO(strlen("Digite o Novo Nome do Autor do Livro: ") + 30);
+                    gotoXY(strlen("Digite o Novo Nome do Autor do Livro:   "), 1);
                     fgets(livros.nome_autor, 50, stdin);
                     //O novo campo que foi digitado vai receber um \0 para indicar o fim
                     livros.nome_autor[strlen(livros.nome_autor) - 1]= '\0';
@@ -256,7 +271,11 @@ void procurarLivros() {
                     break;
                 case 3:
                     fflush(stdin);
-                    printf("\nDigite a Nova Area de Conhecimento do Livro: ");
+                    menuCIMA(strlen("Digite a Nova Area de Conhecimento do Livro: ") + 30);
+                    menuOPCAO("Digite a Nova Area de Conhecimento do Livro: ", strlen("Digite a Nova Area de Conhecimento do Livro: ") + 30);
+                    gotoXY(0, 2);
+                    menuBAIXO(strlen("Digite a Nova Area de Conhecimento do Livro: ") + 30);
+                    gotoXY(strlen("Digite a Nova Area de Conhecimento do Livro:   "), 1);
                     fgets(livros.nome_livro, 50, stdin);
                     //O novo campo que foi digitado vai receber um \0 para indicar o fim
                     livros.area[strlen(livros.area) - 1]= '\0';
@@ -265,7 +284,11 @@ void procurarLivros() {
                     break;
                 case 4:
                     fflush(stdin);
-                    printf("\nDigite a Nova Quantidade de Livros: ");
+                    menuCIMA(strlen("Digite a Nova Quantidade de Livros: ") + 20);
+                    menuOPCAO("Digite a Nova Quantidade de Livros: ", strlen("Digite a Nova Quantidade de Livros: ") + 20);
+                    gotoXY(0, 2);
+                    menuBAIXO(strlen("Digite a Nova Quantidade de Livros: ") + 20);
+                    gotoXY(strlen("Digite a Nova Quantidade de Livros:   "), 1);
                     scanf("%d", &livros.quantidade);
                     break;
                 case 5:
@@ -301,8 +324,7 @@ void excluirLivros() {
     FILE *arq_auxiliar = fopen("auxiliar.txt", "w+b");
     if(arquivo == NULL || arq_auxiliar == NULL) {
         printf("\n Impossivel Abrir o arquivo!\n");
-    }
-    else {
+    } else {
         fflush(stdin);
         menuCIMA(60);
         menuOPCAO("Digite o Nome do Livro que Deseja Excluir:    ", 60);
@@ -321,16 +343,16 @@ void excluirLivros() {
         }
         fclose(arquivo);
         fclose(arq_auxiliar);
-        if(j =1){
+        if(j = 1) {
             printf("livro encontrado\n");
         }
-        if(remove("cad_livros.txt")==0){
+        if(remove("cad_livros.txt") == 0) {
             menuCIMA(60);
             menuOPCAO("         Livro excluido com Sucesso         ", 60);
             menuBAIXO(60);
-        }else{
+        } else {
             menuCIMA(60);
-            menuOPCAO("         Nao foi possivel excluir o arquivo         ", 60);
+            menuOPCAO("         Nao foi possivel excluir o Livro         ", 60);
             menuBAIXO(60);
             printf("\n\n%s\n\n", strerror(errno));
         }
@@ -342,7 +364,6 @@ void excluirLivros() {
 
     }
 }
-
 
 int menuAcervo() {
     menuCIMA(40);
