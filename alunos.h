@@ -210,6 +210,7 @@ void alterarAlunos() {
     FILE *arquivo = fopen("cad_alunos.txt", "r+b");
     verificadorArquivo(arquivo);
     fflush(stdin);
+    system("cls");
     menuCIMA(50);
     menuOPCAO("Digite o CPF que deseja editar: ", 50);
     menuBAIXO(50);
@@ -223,15 +224,15 @@ void alterarAlunos() {
             menuCIMA(32);
             menuOPCAO("         Dados Atuais         ", 32);
             menuBAIXO(32);
-            printf("\nNome do Aluno: %s", al.nome);
-            printf("\nMatricula do Aluno: %d", al.matricula);
-            printf("\nCPF Atual: %s\n",al.cpf );
-            printf("\nDigite o Novo CPF: ");
+            printf("\n Nome do Aluno: %s", al.nome);
+            printf("\n Matricula do Aluno: %d", al.matricula);
+            printf("\n CPF Atual: %s\n",al.cpf );
+            printf("\n\n Digite o Novo CPF: ");
             fflush(stdin);
             fgets(al.cpf, 11, stdin);
             //O novo cpf que foi digitado vai receber um \0 para indicar o fim
             al.cpf[strlen(al.cpf) - 1]= '\0';
-            printf("\nDigite o Novo Nome: ");
+            printf("\n Digite o Novo Nome: ");
             fflush(stdin);
             fgets(al.nome, 50, stdin);
             strupr(al.nome);
@@ -242,10 +243,10 @@ void alterarAlunos() {
             //inscrevo os novos dados e verifico se foi feito com sucesso
             if(fwrite(&al,sizeof(CAD_ALUNOS),1,arquivo) != 1) {
                 system("cls");
-                printf("\n Falha ao Alterar o registro!\n");
+                printf("\n\n\n\n Falha ao Alterar o registro!\n");
             } else {
                 system("cls");
-                printf("\n Registro alterado com sucesso!\n");
+                printf("\n\n\n\n Registro alterado com sucesso!\n");
             }
             break;
         }
