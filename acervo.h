@@ -329,6 +329,7 @@ void excluirLivros() {
         menuCIMA(60);
         menuOPCAO("Digite o Nome do Livro que Deseja Excluir:    ", 60);
         menuBAIXO(60);
+        gotoXY(47, 2);
         gets(auxiliar);
         strupr(auxiliar);
 
