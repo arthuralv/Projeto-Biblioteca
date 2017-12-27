@@ -11,7 +11,9 @@ main() {
     int i, j, op;
     menuCIMA(116);
     printf("                                    ...:::::  BIBLIOTECA CENTRAL DA UEPB  :::::...");
-    gotoXY(0, 25);
+    gotoXY(0, 28);
+    menuBAIXO(55);
+    gotoXY(0, 24);
     menuCIMA(23);
     menuOPCAO(" Carregando Sistema...", 23);
     menuBAIXO(23);
@@ -19,12 +21,12 @@ main() {
         printf ("  %d%%\r", i*2);
         for (j = 0; j < i; j++) {
             if (j == 0)
-                printf(" ");
+                printf("  ");
             printf ("%c", 177);
             Sleep(2);
         }
     }
-    gotoXY(26, 27);
+    gotoXY(26, 26);
     system("cls");
     do {
         op = menu_principal();

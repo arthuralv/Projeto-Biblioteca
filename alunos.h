@@ -8,7 +8,7 @@ int mat = 100;
 typedef struct alunos {
     int matricula;
     char nome[50];
-    char cpf[11];
+    char cpf[12];
 } CAD_ALUNOS;
 
 void verificadorArquivo(FILE* arquivo);
@@ -54,31 +54,33 @@ int contadorMat() {
     arquivo = fopen("cad_alunos.txt", "rb");
     CAD_ALUNOS al;
     verificadorArquivo(arquivo);
-    while(fread(&al, sizeof(CAD_ALUNOS), 1,arquivo) == 1) {
+    while(fread(&al, sizeof(CAD_ALUNOS), 1, arquivo) == 1) {
         aux++;
     }
     fclose(arquivo);
     return aux;
 }
 
-int verificarCpf(char cpf[11]) {
+int verificarCpf(char cpf[12]) {
     int i=0;
     FILE *arquivo;
     arquivo = fopen("cad_alunos.txt", "rb");
     verificadorArquivo(arquivo);
     CAD_ALUNOS al;
-
     while(fread(&al,sizeof(CAD_ALUNOS), 1, arquivo) == 1) {
-        if(strcmp(cpf, al.cpf )==0) {
+        if(strcmp(cpf, al.cpf ) == 0) {
+            fclose(arquivo);
             return 1;
         }
     }
+    system("cls");
+    fclose(arquivo);
 }
 
 void cadastrarAlunos() {
     system("cls");
     int aux = 0, x=0;
-    char cpf[11];
+    char cpf[12];
     FILE *arquivo; //FILE (sempre maiuscula), variável do tipo file (arquivo é o nome do ponteiro), nesta linha está sendo criado o ponteiro
     FILE *arq;
     CAD_ALUNOS al;
@@ -89,7 +91,6 @@ void cadastrarAlunos() {
     verificadorArquivo(arquivo);
     char op;
     aux = contadorMat();
-
     system("cls");
     fflush(stdin);
     menuCIMA(strlen("Matricula do Aluno: ")+10);
@@ -122,8 +123,10 @@ void cadastrarAlunos() {
     x = verificarCpf(al.cpf);
     if(x == 1) {
         system("cls");
-        printf("\n\n  CPF ja cadastrado!\n");
+        printf("\n\n  CPF ja cadastrado!\n\n");
         system("pause");
+        fclose(arquivo); //Fecha o arquivo que foi aberto.
+        fclose(arq);
         system("cls");
         return;
     } else {
@@ -138,7 +141,6 @@ void cadastrarAlunos() {
     menuBAIXO(strlen("Registro gravado com sucesso!"));
     gotoXY(2, 3);
     system("pause");
-
     fclose(arquivo); //Fecha o arquivo que foi aberto.
     fclose(arq);
     system("cls");
@@ -160,19 +162,20 @@ void listarAlunos() {
         x++;
     }
     if(x == 0) {
-        printf("\n\n  LISTA VAZIA!\n");
+        printf("\n\n  LISTA VAZIA!\n\n\n");
     }
-
     menuCIMA(31);
     menuOPCAO("   FIM DA LISTAGEM DE ALUNOS", 31);
     menuBAIXO(31);
     system("pause");
     system("cls");
+    fclose(arquivo);
 }
 
 void editarAlunos() {
     int op = 0;
     do {
+        system("cls");
         menuCIMA(29);
         menuOPCAO("     LISTAGEM DE ALUNOS", 29);
         menuOPCAO("", 29);
@@ -203,9 +206,9 @@ void editarAlunos() {
 void alterarAlunos() {
     CAD_ALUNOS al;
     //variavel para contar a posição
-    int i=0;
+    int i = 0;
     //variavel para salvar o que o usuario digitar e comparar com os que está no arquivo
-    char auxiliar[11];
+    char auxiliar[12];
     //Criando um arquivo, com um ponteiro do tipo FILE
     FILE *arquivo = fopen("cad_alunos.txt", "r+b");
     verificadorArquivo(arquivo);
@@ -218,9 +221,9 @@ void alterarAlunos() {
     gets(auxiliar);
     //lê todos os dados do arquivo até encontrar o final do arquivo (EOF)
     while(fread(&al, sizeof(CAD_ALUNOS), 1,arquivo)==1) {
-        i++;
         //comparar a cpf que o usuario digitou com os que ja estão no arquivo
         if(strcmp(auxiliar, al.cpf) == 0) {
+            printf("\n\n");
             menuCIMA(32);
             menuOPCAO("         Dados Atuais         ", 32);
             menuBAIXO(32);
@@ -229,7 +232,7 @@ void alterarAlunos() {
             printf("\n CPF Atual: %s\n",al.cpf );
             printf("\n\n Digite o Novo CPF: ");
             fflush(stdin);
-            fgets(al.cpf, 11, stdin);
+            fgets(al.cpf, 12, stdin);
             //O novo cpf que foi digitado vai receber um \0 para indicar o fim
             al.cpf[strlen(al.cpf) - 1]= '\0';
             printf("\n Digite o Novo Nome: ");
@@ -239,17 +242,26 @@ void alterarAlunos() {
             //O novo nome que foi digitado vai receber um \0 para indicar o fim
             al.nome[strlen(al.nome) - 1] = '\0';
             //vou para a posicao no arquivo que eu quero incluir os novos dados
-            fseek(arquivo,(i-1)*sizeof(CAD_ALUNOS),SEEK_SET);
+            fseek(arquivo, i * sizeof(CAD_ALUNOS),SEEK_SET);
             //inscrevo os novos dados e verifico se foi feito com sucesso
-            if(fwrite(&al,sizeof(CAD_ALUNOS),1,arquivo) != 1) {
+            if(fwrite(&al,sizeof(CAD_ALUNOS), 1 , arquivo) != 1) {
                 system("cls");
                 printf("\n\n\n\n Falha ao Alterar o registro!\n");
+                 system("cls");
+                 fclose(arquivo);
+                 return;
             } else {
                 system("cls");
                 printf("\n\n\n\n Registro alterado com sucesso!\n");
             }
+            i++;
             break;
         }
+    }
+    if( i == 0 ){
+        system("cls");
+        printf("\n\n Nao ha registro com tal CPF!\n\n");
+
     }
     system("pause");
     system("cls");
@@ -258,8 +270,8 @@ void alterarAlunos() {
 
 void excluirAlunos() {
     CAD_ALUNOS al;
-    int i = 0;
-    char auxiliar[11];
+    int i = 0, j = 0;
+    char auxiliar[12];
     //Criando um arquivo, com um ponteiro do tipo FILE
     FILE *arquivo = fopen("cad_alunos.txt", "a+b");
     FILE *arq_auxiliar = fopen("auxiliar.txt", "w+b");
@@ -272,22 +284,39 @@ void excluirAlunos() {
         menuBAIXO(50);
         gotoXY(35, 1);
         gets(auxiliar);
-
         while(fread(&al, sizeof(CAD_ALUNOS), 1, arquivo) == 1) {
             i++;
             if(strcmp(auxiliar, al.cpf) == 0) {
                 al.cpf[strlen(al.cpf) - 1] = '\0';
                 al.nome[strlen(al.nome) - 1] = '\0';
                 fseek(arquivo,(i - 1) * sizeof(CAD_ALUNOS),SEEK_SET);
+                j++;
             } else {
                 fwrite(&al,sizeof(CAD_ALUNOS), 1, arq_auxiliar);
             }
         }
         fclose(arquivo);
         fclose(arq_auxiliar);
+        system("cls");
+        if(j > 0) {
+            printf("\n\n  Registro encontrado!\n\n");
+            system("pause");
+        } else {
+
+            printf("\n\n  Nao ha registro com esse CPF!\n\n");
+            system("pause");
+            system("cls");
+            fclose(arquivo);
+            fclose(arq_auxiliar);
+            return;
+        }
+        system("cls");
         if(remove("cad_alunos.txt") == 0) {
             rename("auxiliar.txt", "cad_alunos.txt");
-            printf("\n\n  --------------- Registro excluido com sucesso ---------------\n");
+            putchar('\n');
+            menuCIMA(40);
+            menuOPCAO("    Registro excluido com Sucesso", 40);
+            menuBAIXO(40);
             system("pause");
         } else {
             printf("\n\n  Nao foi Possivel Excluir o Cadastro!\n");
@@ -296,14 +325,15 @@ void excluirAlunos() {
         }
         system("cls");
     }
+    fclose(arquivo);
+    fclose(arq_auxiliar);
 }
 //Função para verificar que opção vai ser usada no menu aluno
 
 void verificadorArquivo(FILE *arquivo) {
     if(arquivo == NULL) {
         system("cls");
-        printf("O \n\n\n\n");
-        printf("Saindo do programa...");
+        printf("\n\n  Saindo do programa...");
         Sleep(100);
         exit(1);
     }

@@ -1,6 +1,7 @@
 #ifndef EMPRESTIMOS_H_INCLUDED
 #define EMPRESTIMOS_H_INCLUDED
 #endif // EMPRESTIMOS_H_INCLUDED
+
 #include <stdio.h>
 #include <windows.h>
 #include <dos.h>
@@ -67,20 +68,19 @@ int contadorCodEm() {
 }
 
 int veri_cpf(int cod) {
-    int i = 0;
     FILE *arquivo;
     arquivo = fopen("cad_alunos.txt", "rb");
     verificadorArquivo(arquivo);
     CAD_ALUNOS al;
-
     while(fread(&al, sizeof(CAD_ALUNOS), 1, arquivo) == 1) {
         if(cod == al.matricula) {
-            break;
+            fclose(arquivo);
             return 1;
         }
     }
+    fclose(arquivo);
+    return 0;
 }
-
 void cadastrarEmprestimos() {
     system("cls");
     char dataatual[9];
@@ -102,8 +102,23 @@ void cadastrarEmprestimos() {
     livro = fopen("cad_livros.txt", "r+b");
     aluno = fopen("cad_alunos.txt", "rb");
     verificadorArquivo(arquivo);
-    verificadorArquivo(livro);
-    verificadorArquivo(aluno);
+    if(livro == NULL){
+        printf("\n\n  Nao ha livro para devolver!\n");
+        system("pause");
+        system("cls");
+        fclose(arquivo);
+        fclose(livro);
+        return;
+    }
+    if(aluno == NULL){
+        printf("\n\n  Nao ha aluno cadastrado!\n");
+        system("pause");
+        system("cls");
+        fclose(arquivo);
+        fclose(livro);
+        fclose(aluno);
+        return;
+    }
     menuCIMA(29);
     menuOPCAO(" REALIZANDO EMPRESTIMO", 29);
     menuBAIXO(29);
@@ -111,20 +126,25 @@ void cadastrarEmprestimos() {
     printf("\n\n Digite o codigo do livro que deseja realizar o emprestimo: ");
     scanf("%d", &cod);
     while(fread(&li, sizeof(CAD_LIVROS), 1, livro)==1) {
-        aux++;
         if(cod == li.codigo) {
             li.quantidade = li.quantidade - 1;
             if(li.quantidade < 0) {
-                printf("Sem livro para emprestimo.\n");
+                system("cls");
+                printf("\n\n  Sem livro para emprestimo.\n");
                 system("pause");
+                fclose(arquivo);
+                fclose(livro);
+                fclose(aluno);
                 return;
             } else {
-                fseek(livro,(aux-1)*sizeof(CAD_LIVROS),SEEK_SET);
+                fseek(livro,(aux)*sizeof(CAD_LIVROS),SEEK_SET);
                 fwrite(&li,sizeof(CAD_LIVROS), 1,livro);
             }
             break;
         }
+        aux++;
     }
+    system("cls");
     printf("\n\n Digite a Matricula do Aluno que deseja realizar o emprestimo: ");
     scanf("%d", &cod);
     //continuar a fazer a busca para saber se os alunos tem o mesmo CPF
@@ -133,6 +153,10 @@ void cadastrarEmprestimos() {
         system("cls");
         printf("\n\n  Matricula nao existe!\n");
         system("pause");
+        system("cls");
+        fclose(arquivo);
+        fclose(livro);
+        fclose(aluno);
         return;
     } else {
         while(fread(&al, sizeof(CAD_ALUNOS), 1, aluno)==1) {
@@ -151,8 +175,12 @@ void cadastrarEmprestimos() {
         }
         if(i >= 2) {
             system("cls");
-            printf("\n\n  Nao foi possivel realizar o Emprestimo aluno, devido a quantidade maxima de Emprestimos\n\n");
+            printf("\n\n Nao foi possivel realizar o Emprestimo do aluno, devido a quantidade maxima de Emprestimos.\n");
             system("pause");
+            system("cls");
+            fclose(arquivo);
+            fclose(livro);
+            fclose(aluno);
             return;
         } else {
             aux = contadorCodEm();
@@ -196,12 +224,12 @@ void cadastrarEmprestimos() {
             fwrite(&em, sizeof(CAD_EMP), 1, arquivo);
         }
     }
-
     fclose(arquivo); //Fecha o arquivo que foi aberto.
     fclose(livro);
     fclose(aluno);
     system("pause");
     system("cls");
+    return;
 }
 
 void listartodos() {
@@ -212,7 +240,7 @@ void listartodos() {
     menuCIMA(27);
     menuOPCAO("  LISTAGEM DE EMPRESTIMOS", 27);
     menuBAIXO(27);
-    while(fread(&em, sizeof(CAD_EMP), 1,arquivo) == 1) {
+    while(fread(&em, sizeof(CAD_EMP), 1,arquivo)==1) {
         printf("\n Codigo do Emprestimo: %d\n", em.cod_emprestimo);
         printf("\n Matricula do Aluno: %d\n", em.matricula_aluno);
         printf("\n Nome do Aluno: %s\n", em.nome_aluno);
@@ -223,25 +251,28 @@ void listartodos() {
         printf("---------------------------------------------\n\n");
         x++;
     }
-    if(x == 0){
-        printf("\n\n  LISTA VAZIA!\n");
+    if(x == 0) {
+        printf("\n\n  LISTA VAZIA!\n\n\n");
     }
     menuCIMA(32);
     menuOPCAO(" FIM DA LISTAGEM DE EMPRESTIMOS", 32);
     menuBAIXO(32);
     system("pause");
     system("cls");
+    fclose(arquivo);
+    return;
 }
 
 void listar_por_Alunos() {
-    int aux, x = 0;
+    int aux;
+    int x = 0;
     FILE *arquivo;
     arquivo = fopen("emprestimos", "rb");
     CAD_EMP em;
     menuCIMA(36);
     menuOPCAO(" LISTAGEM DE EMPRESTIMOS POR ALUNO", 36);
     menuBAIXO(36);
-    printf("\n Digite a Matricula do Aluno: ");
+    printf("\n\n Digite a Matricula do Aluno: ");
     scanf("%d", &aux);
     while(fread(&em, sizeof(CAD_EMP), 1,arquivo)==1) {
         if(aux == em.matricula_aluno) {
@@ -255,19 +286,21 @@ void listar_por_Alunos() {
             x++;
         }
     }
-    if(x == 0){
-        printf("\n\n  LISTA VAZIA!\n");
+    if(x == 0) {
+        printf("\n\n  LISTA VAZIA!\n\n\n");
     }
     menuCIMA(32);
     menuOPCAO(" FIM DA LISTAGEM DE EMPRESTIMOS", 32);
     menuBAIXO(32);
     system("pause");
     system("cls");
+    fclose(arquivo);
     return;
 }
 
 void listar_por_livros() {
-    int aux, x = 0;
+    int aux;
+    int x = 0;
     FILE *arquivo;
     arquivo = fopen("emprestimos", "rb");
     CAD_EMP em;
@@ -288,14 +321,112 @@ void listar_por_livros() {
             x++;
         }
     }
-    if(x == 0){
-        printf("\n\n  LISTA VAZIA!\n");
+    if(x == 0) {
+        printf("\n\n  LISTA VAZIA!\n\n\n");
     }
     menuCIMA(32);
     menuOPCAO(" FIM DA LISTAGEM DE EMPRESTIMOS", 32);
     menuBAIXO(32);
     system("pause");
     system("cls");
+    fclose(arquivo);
+    return;
+}
+void devolucao() {
+    int aux=0,j =0,i=0;
+    char auxlivro[50];
+    FILE *arquivo;
+    FILE *livro;
+    CAD_EMP em;
+    CAD_LIVROS li;
+    arquivo = fopen("emprestimos", "rb");
+    livro = fopen("cad_livros.txt", "r+b");
+    verificadorArquivo(arquivo);
+    if(livro == NULL){
+        printf("\n\n  Nao ha livro para devolver!");
+        system("pause");
+        system("cls");
+        fclose(arquivo);
+        fclose(livro);
+        return;
+    }
+    menuCIMA(60);
+    menuOPCAO("  Qual Codigo do Emprestimo que Deseja fazer a Devolucao:", 60);
+    menuBAIXO(60);
+    gotoXY(60, 1);
+    scanf("%d", &aux);
+    while(fread(&em, sizeof(CAD_EMP), 1, arquivo)==1) {
+        if(aux == em.cod_emprestimo) {
+            j = em.cod_livro;
+            break;
+        }
+    }
+    system("cls");
+    while(fread(&li, sizeof(CAD_LIVROS), 1, livro) == 1) {
+        i++;
+        if(em.cod_livro == li.codigo) {
+            li.quantidade = li.quantidade + 1;
+            fseek(livro,(i-1)*sizeof(CAD_LIVROS),SEEK_SET);
+            if(fwrite(&li, sizeof(CAD_LIVROS), 1, livro) != 1) {
+                menuCIMA(27);
+                menuOPCAO("  Falha ao fazer devolucao!", 27);
+                menuBAIXO(27);
+                system("pause");
+                printf("\n\n%s\n\n", strerror(errno));
+            } else {
+                menuCIMA(20);
+                menuOPCAO("  Devolucao feita com Sucesso!", 20);
+                menuBAIXO(20);
+                system("pause");
+            }
+            break;
+        }
+    }
+    system("cls");
+    fclose(arquivo);
+    fclose(livro);
+    return;
+}
+
+void cancelar() {
+    CAD_EMP em;
+    int i = 0;
+    int auxiliar;
+    //Criando um arquivo, com um ponteiro do tipo FILE
+    FILE *arquivo = fopen("emprestimos", "a+b");
+    FILE *arq_auxiliar = fopen("auxiliar", "w+b");
+    if(arquivo == NULL || arq_auxiliar == NULL) {
+        printf("\n\n Impossivel abrir o arquivo!\n");
+    } else {
+        fflush(stdin);
+        printf("\n\n  Digite o Codigo do Emprestimo que deseja Cancelar: ");
+        scanf("%d", &auxiliar);
+        while(fread(&em, sizeof(CAD_EMP), 1, arquivo) == 1) {
+            i++;
+            if(auxiliar == em.cod_emprestimo) {
+                fseek(arquivo,(i - 1) * sizeof(CAD_EMP),SEEK_SET);
+            } else {
+                fwrite(&em,sizeof(CAD_EMP), 1, arq_auxiliar);
+            }
+        }
+        fclose(arquivo);
+        fclose(arq_auxiliar);
+        if(remove("emprestimos") == 0) {
+            rename("auxiliar", "emprestimos");
+            menuCIMA(40);
+            menuOPCAO("Emprestimo Cancelado com Sucesso", 40);
+            menuBAIXO(40);
+            system("pause");
+        } else {
+            printf("Nao foi possivel Cancelar o Emprestimo!\n");
+            printf("\n\n%s\n\n", strerror(errno));
+            system("pause");
+        }
+        system("cls");
+    }
+    fclose(arquivo);
+    fclose(arq_auxiliar);
+    return;
 }
 
 void listar_emprestimos() {
@@ -339,94 +470,11 @@ void listar_emprestimos() {
             break;
         }
     } while(op != 4);
-}
-
-void devolucao() {
-    int aux=0,j =0,i=0;
-    char auxlivro[50];
-    FILE *arquivo;
-    FILE *livro;
-    CAD_EMP em;
-    CAD_LIVROS li;
-    arquivo = fopen("emprestimos", "rb");
-    livro = fopen("cad_livros.txt", "r+b");
-    verificadorArquivo(arquivo);
-    verificadorArquivo(livro);
-    menuCIMA(60);
-    menuOPCAO("  Qual Codigo do Emprestimo que Deseja fazer a Devolucao:", 60);
-    menuBAIXO(60);
-    gotoXY(60, 1);
-    scanf("%d", &aux);
-    while(fread(&em, sizeof(CAD_EMP), 1, arquivo)==1) {
-        if(aux == em.cod_emprestimo) {
-            j = em.cod_livro;
-            break;
-        }
-    }
-    system("cls");
-    while(fread(&li, sizeof(CAD_LIVROS), 1, livro) == 1) {
-        i++;
-        if(em.cod_livro == li.codigo) {
-            li.quantidade = li.quantidade + 1;
-            fseek(livro,(i-1)*sizeof(CAD_LIVROS),SEEK_SET);
-            if(fwrite(&li, sizeof(CAD_LIVROS), 1, livro) != 1) {
-                menuCIMA(27);
-                menuOPCAO("  Falha ao fazer devolucao!", 27);
-                menuBAIXO(27);
-                system("pause");
-                printf("\n\n%s\n\n", strerror(errno));
-            } else {
-                menuCIMA(20);
-                menuOPCAO("  Devolucao feita com Sucesso!", 20);
-                menuBAIXO(20);
-                system("pause");
-            }
-            break;
-        }
-    }
-    system("cls");
-}
-
-void cancelar() {
-    CAD_EMP em;
-    int i = 0;
-    int auxiliar;
-    //Criando um arquivo, com um ponteiro do tipo FILE
-    FILE *arquivo = fopen("emprestimos", "a+b");
-    FILE *arq_auxiliar = fopen("auxiliar", "w+b");
-    if(arquivo == NULL || arq_auxiliar == NULL) {
-        printf("\n\n Impossivel abrir o arquivo!\n");
-    } else {
-        fflush(stdin);
-        printf("\n\n  Digite o Codigo do Emprestimo que deseja Cancelar: ");
-        scanf("%d", &auxiliar);
-
-        while(fread(&em, sizeof(CAD_EMP), 1, arquivo) == 1) {
-            i++;
-            if(auxiliar == em.cod_emprestimo) {
-                fseek(arquivo,(i - 1) * sizeof(CAD_EMP),SEEK_SET);
-            } else {
-                fwrite(&em,sizeof(CAD_EMP), 1, arq_auxiliar);
-            }
-        }
-        fclose(arquivo);
-        fclose(arq_auxiliar);
-        if(remove("emprestimos") == 0) {
-            rename("auxiliar", "emprestimos");
-            menuCIMA(40);
-            menuOPCAO("Emprestimo Cancelado com Sucesso", 40);
-            menuBAIXO(40);
-            system("pause");
-        } else {
-            printf("Nao foi possivel Cancelar o Emprestimo!\n");
-            printf("\n\n%s\n\n", strerror(errno));
-            system("pause");
-        }
-        system("cls");
-    }
+    return;
 }
 
 //Função para verificar que opção vai ser usada no menu aluno
+
 void op_emprestimos () {
     int o = 0;
     struct emprestimos em;
@@ -472,7 +520,5 @@ void op_emprestimos () {
             system("pause");
             break;
         }
-        fflush(stdin);
-    } while(o >= 5);
+    } while(o != 5);
 }
-
