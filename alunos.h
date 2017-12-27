@@ -58,7 +58,22 @@ int contadorMat() {
         aux++;
     }
     fclose(arquivo);
-    return aux;
+    return aux+1;
+}
+
+int verificarmatricula(int aux){
+    int a = 0;
+    FILE *arquivo;
+    arquivo = fopen("cad_alunos.txt", "rb");
+    CAD_ALUNOS al;
+    verificadorArquivo(arquivo);
+    while(fread(&al, sizeof(CAD_ALUNOS), 1, arquivo) == 1) {
+        if(aux == al.matricula){
+            fclose(arquivo);
+            return 1;
+        }
+    }
+    fclose(arquivo);
 }
 
 int verificarCpf(char cpf[12]) {
@@ -90,7 +105,7 @@ void cadastrarAlunos() {
     verificadorArquivo(arq);
     verificadorArquivo(arquivo);
     char op;
-    aux = contadorMat();
+    aux = contadorMat() + 1;
     system("cls");
     fflush(stdin);
     menuCIMA(strlen("Matricula do Aluno: ")+10);
@@ -99,6 +114,9 @@ void cadastrarAlunos() {
     menuBAIXO(strlen("Matricula do Aluno: ")+10);
     gotoXY(22, 1);
     aux = aux + mat;
+    if(verificarmatricula(aux) == 1){
+        aux = aux + 2;
+    }
     printf("%d\n\n", aux);
     al.matricula = aux;
     system("pause");

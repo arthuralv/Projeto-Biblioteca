@@ -81,6 +81,22 @@ int veri_cpf(int cod) {
     fclose(arquivo);
     return 0;
 }
+
+int verificarcod(int aux){
+    int a = 0;
+    FILE *arquivo;
+    arquivo = fopen("emprestimo", "rb");
+    CAD_EMP em;
+    verificadorArquivo(arquivo);
+    while(fread(&em, sizeof(CAD_EMP), 1, arquivo) == 1) {
+        if(aux == em.cod_emprestimo){
+            fclose(arquivo);
+            return 1;
+        }
+    }
+    fclose(arquivo);
+}
+
 void cadastrarEmprestimos() {
     system("cls");
     char dataatual[9];
@@ -102,23 +118,8 @@ void cadastrarEmprestimos() {
     livro = fopen("cad_livros.txt", "r+b");
     aluno = fopen("cad_alunos.txt", "rb");
     verificadorArquivo(arquivo);
-    if(livro == NULL){
-        printf("\n\n  Nao ha livro para devolver!\n");
-        system("pause");
-        system("cls");
-        fclose(arquivo);
-        fclose(livro);
-        return;
-    }
-    if(aluno == NULL){
-        printf("\n\n  Nao ha aluno cadastrado!\n");
-        system("pause");
-        system("cls");
-        fclose(arquivo);
-        fclose(livro);
-        fclose(aluno);
-        return;
-    }
+    verificadorArquivo(livro);
+    verificadorArquivo(aluno);
     menuCIMA(29);
     menuOPCAO(" REALIZANDO EMPRESTIMO", 29);
     menuBAIXO(29);
@@ -126,37 +127,28 @@ void cadastrarEmprestimos() {
     printf("\n\n Digite o codigo do livro que deseja realizar o emprestimo: ");
     scanf("%d", &cod);
     while(fread(&li, sizeof(CAD_LIVROS), 1, livro)==1) {
+        aux++;
         if(cod == li.codigo) {
             li.quantidade = li.quantidade - 1;
             if(li.quantidade < 0) {
-                system("cls");
-                printf("\n\n  Sem livro para emprestimo.\n");
+                printf("Sem livro para emprestimo.\n");
                 system("pause");
-                fclose(arquivo);
-                fclose(livro);
-                fclose(aluno);
                 return;
             } else {
-                fseek(livro,(aux)*sizeof(CAD_LIVROS),SEEK_SET);
+                fseek(livro,(aux-1)*sizeof(CAD_LIVROS),SEEK_SET);
                 fwrite(&li,sizeof(CAD_LIVROS), 1,livro);
             }
             break;
         }
-        aux++;
     }
-    system("cls");
     printf("\n\n Digite a Matricula do Aluno que deseja realizar o emprestimo: ");
     scanf("%d", &cod);
     //continuar a fazer a busca para saber se os alunos tem o mesmo CPF
     x = veri_cpf(cod);
-    if(x == 1) {
+    if(x != 1) {
         system("cls");
         printf("\n\n  Matricula nao existe!\n");
         system("pause");
-        system("cls");
-        fclose(arquivo);
-        fclose(livro);
-        fclose(aluno);
         return;
     } else {
         while(fread(&al, sizeof(CAD_ALUNOS), 1, aluno)==1) {
@@ -175,12 +167,8 @@ void cadastrarEmprestimos() {
         }
         if(i >= 2) {
             system("cls");
-            printf("\n\n Nao foi possivel realizar o Emprestimo do aluno, devido a quantidade maxima de Emprestimos.\n");
+            printf("\n\n Nao foi possivel realizar o Emprestimo aluno, devido a quantidade maxima de Emprestimos\n");
             system("pause");
-            system("cls");
-            fclose(arquivo);
-            fclose(livro);
-            fclose(aluno);
             return;
         } else {
             aux = contadorCodEm();
@@ -224,12 +212,12 @@ void cadastrarEmprestimos() {
             fwrite(&em, sizeof(CAD_EMP), 1, arquivo);
         }
     }
+
     fclose(arquivo); //Fecha o arquivo que foi aberto.
     fclose(livro);
     fclose(aluno);
     system("pause");
     system("cls");
-    return;
 }
 
 void listartodos() {
@@ -332,6 +320,7 @@ void listar_por_livros() {
     fclose(arquivo);
     return;
 }
+
 void devolucao() {
     int aux=0,j =0,i=0;
     char auxlivro[50];

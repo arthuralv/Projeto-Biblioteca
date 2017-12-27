@@ -72,6 +72,22 @@ int contadorCod() {
     return aux;
 }
 
+int verificarcodigo(int aux){
+    int a = 0;
+    FILE *arquivo;
+    arquivo = fopen("cad_livros.txt", "rb");
+    CAD_LIVROS li;
+    verificadorArquivo(arquivo);
+    while(fread(&li, sizeof(CAD_LIVROS), 1, arquivo) == 1) {
+        if(aux == li.codigo){
+            fclose(arquivo);
+            return 1;
+        }
+    }
+    fclose(arquivo);
+}
+
+
 void cadastrarLivros() {
     system("cls");
     FILE* arquivo; //FILE (sempre maiuscula), variável do tipo file (arquivo é o nome do ponteiro), nesta linha está sendo criado o ponteiro
@@ -81,7 +97,7 @@ void cadastrarLivros() {
     verificadorArquivo(arquivo);
     char op;
     int aux = 0;
-    aux = contadorCod();
+    aux = contadorCod()+1;
     system("cls");
     fflush(stdin);
     menuCIMA(strlen("Codigo do Livro: ") + 15);
@@ -90,6 +106,9 @@ void cadastrarLivros() {
     menuBAIXO(strlen("Codigo do livro: ") + 15);
     gotoXY(22, 1);
     aux = aux + cod_livro;
+    if(verificarcodigo(aux) == 1){
+        aux = aux + 2;
+    }
     printf("%d\n\n", aux);
     livros.codigo = aux;
     system("pause");
@@ -338,6 +357,8 @@ void excluirLivros() {
                 fwrite( &li, sizeof(CAD_LIVROS), 1, arq_auxiliar);
             }
         }
+        fclose(arquivo);
+        fclose(arq_auxiliar);
         if(remove("cad_livros.txt")==0) {
             menuCIMA(60);
             menuOPCAO("         Livro excluido com Sucesso", 60);
