@@ -1,7 +1,7 @@
 # Projeto de Biblioteca - UEPB
 
 * Introdução:
-  - Nesse projeto é possível simular uma biblioteca virtual, onde poderá cadastrar alunos e livros e também um aluno pode locar um livro e assim, devolvê-lo.
+  - Nesse projeto é possível simular uma biblioteca virtual, onde poderá ser cadastrados alunos e livros; também será possível um aluno pode locar um livro e assim, devolvê-lo no prazo estabelicido.
 
 * Processo:
   - Somente o ADM poderá cadastrar novos livros e alunos.
